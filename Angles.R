@@ -89,32 +89,70 @@ for (i in 1:nrow(data)){
 }
 
 ## Radar Chart
-data.aab = subset(data, type=="delta propre" & d.g=="droit" & V21=="aab" & V22==0.5)
+radar.angle <- function (data, zone, main, angle, dist, title) {
+  tmp = subset(data, type==zone & d.g==main & V21==angle & V22==dist) ; print(nrow(tmp))
+  if (nrow(tmp) != 0) {
+  radar.tmp = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp)=seq(0,350,10)
+  
+  for (i in tmp[,19]) { radar.tmp[1,round(i/10)%%36+1] = radar.tmp[1,round(i/10)%%36+1]+1 } ## tmp[,16] c'est theta, 19 pour tc
+  
+  radar.tmp = radar.tmp / sum(radar.tmp)*100 ; 
+  radar.tmp=rbind(rep(20,10) ,rep(0,10) , radar.tmp)
+  
+  radarchart( radar.tmp  , axistype=1 , 
+              pcol=rgb(0.2,0.5,0.5,0.9) , pfcol=rgb(0.2,0.5,0.5,0.5) , plwd=4 , #custom polygon
+              cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8, #custom the grid
+              vlcex=0.8 , #custom labels
+              title = title )
+  } else {print("No Value")}}
 
-radar.aab = as.data.frame(matrix(0,ncol=36))
 
-for (i in data.aab[,16]){
-  print(i)
-  radar.aab[1,round(i/10)%%36+1]=radar.aab[1,round(i/10)%%36+1]+1
-}
 
-radar.aab = radar.aab / sum(radar.aab)*100
- 
-radar.aab=rbind(rep(20,10) ,rep(0,10) , radar.aab)
+radar.angle(data, "delta propre", "droit", "aab", 0.5, "aab 0.5" )
+radar.angle(data, "delta propre", "droit", "aab", 0.7, "aab 0.7" )
+radar.angle(data, "delta propre", "droit", "aab", 0.9, "aab 0.9" )
+radar.angle(data, "delta propre", "droit", "aab", 1.0, "aab 1.0" )
 
-colnames(radar.aab)=seq(0,350,10)
+radar.angle(data, "delta propre", "droit", "abb", 0.5, "abb 0.5" )
+radar.angle(data, "delta propre", "droit", "abb", 0.7, "abb 0.7" )
+radar.angle(data, "delta propre", "droit", "abb", 0.9, "abb 0.9" )
+radar.angle(data, "delta propre", "droit", "abb", 1.0, "abb 1.0" )
 
-radarchart(radar.aab)
+radar.angle(data, "delta propre", "droit", "bbc", 0.5, "bbc 0.5" )
+radar.angle(data, "delta propre", "droit", "bbc", 0.7, "bbc 0.7" )
+radar.angle(data, "delta propre", "droit", "bbc", 0.9, "bbc 0.9" )
+radar.angle(data, "delta propre", "droit", "bbc", 1.0, "bbc 1.0" )
 
-radarchart( radar.aab  , axistype=1 , 
-            
-            #custom polygon
-            pcol=rgb(0.2,0.5,0.5,0.9) , pfcol=rgb(0.2,0.5,0.5,0.5) , plwd=4 , 
-            
-            #custom the grid
-            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
-            
-            #custom labels
-            vlcex=0.8 
-)
+radar.angle(data, "delta propre", "droit", "bcc", 0.5, "bcc 0.5" )
+radar.angle(data, "delta propre", "droit", "bcc", 0.7, "bcc 0.7" )
+radar.angle(data, "delta propre", "droit", "bcc", 0.9, "bcc 0.9" )
+radar.angle(data, "delta propre", "droit", "bcc", 1.0, "bcc 1.0" )
+
+radar.angle(data, "delta propre", "droit", "cca", 0.5, "cca 0.5" )
+radar.angle(data, "delta propre", "droit", "cca", 0.7, "cca 0.7" )
+radar.angle(data, "delta propre", "droit", "cca", 0.9, "cca 0.9" )
+radar.angle(data, "delta propre", "droit", "cca", 1.0, "cca 1.0" )
+
+radar.angle(data, "delta propre", "droit", "caa", 0.5, "caa 0.5" )
+radar.angle(data, "delta propre", "droit", "caa", 0.7, "caa 0.7" )
+radar.angle(data, "delta propre", "droit", "caa", 0.9, "caa 0.9" )
+radar.angle(data, "delta propre", "droit", "caa", 1.0, "caa 1.0" )
+
+
+# 
+# data.aab1 = subset(data, type=="delta propre" & d.g=="droit" & V21=="aab" & V22==0.5)
+# radar.aab1 = as.data.frame(matrix(0,ncol=36))
+# 
+# for (i in data.aab1[,16]){
+#   radar.aab1[1,round(i/10)%%36+1]=radar.aab1[1,round(i/10)%%36+1]+1}
+# 
+# radar.aab1 = radar.aab1 / sum(radar.aab1)*100
+# radar.aab1=rbind(rep(20,10) ,rep(0,10) , radar.aab1)
+# colnames(radar.aab1)=seq(0,350,10)
+# 
+# radarchart( radar.aab1  , axistype=1 , 
+#             pcol=rgb(0.2,0.5,0.5,0.9) , pfcol=rgb(0.2,0.5,0.5,0.5) , plwd=4 , #custom polygon
+#             cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8, #custom the grid
+#             vlcex=0.8 , #custom labels
+#             title = "aab 0.5" )
 
