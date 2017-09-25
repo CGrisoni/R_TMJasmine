@@ -13,12 +13,6 @@ library(ggtern)
 library( reshape2 )
 library( data.table )  
 
-subdata<-function(data,zone,main,out){### retourne un Data contenant uniquement la zone et main spécifiée
-  i=0;r=c()
-  for (i in 1:nrow(data)){
-    if (data[i,2]!= zone | data[i,4]!=main){r<- c(r,i)}}
-  out=data[-r,]
-  return(out)}
 
 # calculs de base sur la liste des données----
 data = mutate( data, xc = x.minut - x.centre )
@@ -41,12 +35,12 @@ for (i in 1:nrow(data)) {
 
 
 #separation des données par zone et main----
-pouceD = subdata(data,"delta de pouce","droit",pouceD)
-pouceG = subdata(data,"delta de pouce","gauche",pouceG)
-propreD = subdata(data,"delta propre","droit",propreD)
-propreG = subdata(data,"delta propre","gauche",propreG)
-controlD = subdata(data,"zone de controle","droit",controlD)
-controlG = subdata(data,"zone de controle","gauche",controlG)
+pouceD = subset(data, type=="delta de pouce" & d.g=="droit")
+pouceG = subset(data, type=="delta de pouce" & d.g=="gauche")
+propreD = subset(data, type=="delta propre" & d.g=="droit")
+propreG = subset(data, type=="delta propre" & d.g=="gauche")
+controlD = subset(data, type=="zone de controle" & d.g=="droit")
+controlG = subset(data, type=="zone de controle" & d.g=="gauche")
 
 # Individual plot and Kest ---
 
