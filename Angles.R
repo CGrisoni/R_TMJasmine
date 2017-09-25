@@ -9,7 +9,8 @@ library(ggtern)
 library( reshape2 )
 library( data.table )
 
-library(fmsb)
+library(fmsb) # radar chart
+library(plotrix) # polar plot
 
 # calculs de base sur la liste des données
 data = mutate( data, xc = x.minut - x.centre )
@@ -383,3 +384,55 @@ radarchart( radar.aab1  , axistype=1 ,
             vlcex=0.8 , centerzero=TRUE, #custom labels
             title = "Axis a 0.5" )
 
+#----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+testpos<-c(seq(90,359),seq(0,89))
+
+
+
+
+data.aab1 = subset(data, type=="delta propre" & d.g=="droit" & V21=="aab" & V22==0.5)
+radar.aab1 = as.data.frame(matrix(0,ncol=360)) ; colnames(radar.aab1)=c(seq(90,359),seq(0,89))
+
+for (i in data.aab1[,19]){
+  radar.aab1[1,round(i-90)%%360+1]=radar.aab1[1,round(i-90)%%360+1]+1}
+
+polar.plot(radar.aab1,testpos,main="Polar Plot", lwd=3,line.col=4)
+
+
+
+
+
+data.aab2 = subset(data, type=="delta propre" & d.g=="droit" & V21=="aab" & V22==0.7)
+radar.aab2 = as.data.frame(matrix(0,ncol=36)) ; colnames(radar.aab2)=c(seq(90,350,10),seq(0,80,10))
+
+for (i in data.aab2[,19]){
+  radar.aab2[1,round(i/10-9)%%36+1]=radar.aab2[1,round(i/10-9)%%36+1]+1}
+
+data.aab3 = subset(data, type=="delta propre" & d.g=="droit" & V21=="aab" & V22==0.9)
+radar.aab3 = as.data.frame(matrix(0,ncol=36)) ; colnames(radar.aab3)=c(seq(90,350,10),seq(0,80,10))
+
+for (i in data.aab3[,19]){
+  radar.aab3[1,round(i/10-9)%%36+1]=radar.aab3[1,round(i/10-9)%%36+1]+1}
+
+data.aab4 = subset(data, type=="delta propre" & d.g=="droit" & V21=="aab" & V22==1.0)
+radar.aab4 = as.data.frame(matrix(0,ncol=36)) ; colnames(radar.aab4)=c(seq(90,350,10),seq(0,80,10))
+
+for (i in data.aab4[,19]){
+  radar.aab4[1,round(i/10-9)%%36+1]=radar.aab4[1,round(i/10-9)%%36+1]+1}
+
+radar.aab1 = radar.aab1 / sum(radar.aab1)*100
+radar.aab2 = radar.aab2 / sum(radar.aab2)*100
+radar.aab3 = radar.aab3 / sum(radar.aab3)*100
+radar.aab4 = radar.aab4 / sum(radar.aab4)*100
+
+radar.aab1=rbind(rep(30,15) ,rep(0,15) , radar.aab1, radar.aab2, radar.aab3, radar.aab4,c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))
+
+radarchart( radar.aab1  , axistype=1 ,
+            pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0,0.7),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0,0.1),rgb(0,0,0)) , #custom polygon
+            cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8, pty = 32, plty=1, plwd=c(1,1,1,1,3), #custom the grid
+            vlcex=0.8 , centerzero=TRUE, #custom labels
+            title = "Axis a 0.5" )
