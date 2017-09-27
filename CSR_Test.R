@@ -516,3 +516,24 @@ plot(tableGrob(testd10))
 par(mfrow = c(1,1))
 #-------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+ppouceDd20 = ppp(pouceD[,17],pouceD[,18], disc(7.5))
+ppouceGd20 = ppp(pouceG[,17],pouceG[,18], disc(7.5))
+ppropreDd20 = ppp(propreD[,17],propreD[,18], disc(7.5))
+ppropreGd20 = ppp(propreG[,17],propreG[,18], disc(7.5))
+pcontrolDd20 = ppp(controlD[,17],controlD[,18], disc(7.5))
+pcontrolGd20 = ppp(controlG[,17],controlG[,18], disc(7.5))
+
+
+
+k=Kest(pcontrolGd20,correction="Ripley",var.approx = TRUE,ratio= TRUE)
+edge =  c(-10,10) # c(-ceiling(max(c(2*sqrt(k$rip),k$t-pi * k$r^2))),ceiling(max(c(2*sqrt(k$rip),k$t-pi * k$r^2))))
+
+plot(k,. - pi * r^2 ~ r,ylim=edge,main="",ylab="",xlab="",legend=FALSE)
+lines(matrix(c(k$r,2*sqrt(k$rip)),ncol=2),lty=2,col="red")
+lines(matrix(c(k$r,-2*sqrt(k$rip)),ncol=2),lty=2,col="red")
+
+plot(pcontrolGd20)
+
+
