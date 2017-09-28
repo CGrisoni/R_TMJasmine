@@ -44,11 +44,11 @@ for (i in 1:nrow(data)) {
     if (data[i,15] > (data[i,12]+data[i,13])/2 & data[i,15] < data[i,13]) {data[i,21] = "bcc"}
     
     if ((data[i,13]+(450-data[i,13])/2)%%360 > 90 & data[i,15] > data[i,13] & data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360 |
-        (data[i,13]+(450-data[i,13])/2)%%360 < 90 & data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360) {data[i,21] = "cca"}
+        (data[i,13]+(450-data[i,13])/2)%%360 < 90 & (data[i,15] > data[i,13] & data[i,13] <= 360 | data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360)) {data[i,21] = "cca"}
     
     if ((data[i,13]+(450-data[i,13])/2)%%360 > 90 & (data[i,15] < 90 | data[i,15] > data[i,13]) |
         (data[i,13]+(450-data[i,13])/2)%%360 < 90 & data[i,15] > (data[i,13]+(450-data[i,13])/2)%%360 & data[i,15] < 90) {data[i,21] = "caa"}
-
+    
     if (data[i,15] == data[i,11]) {data[i,21] = "a"}
     if (data[i,15] == data[i,12]) {data[i,21] = "b"}
     if (data[i,15] == data[i,13]) {data[i,21] = "c"}

@@ -2,9 +2,9 @@ setwd("/Users/CGrisoni/Documents/workspace/TM Jasmine/04_Traitement des données
 data = read.csv( "/Users/CGrisoni/Documents/workspace/TM Jasmine/02_Extraction des données NIST/data_all.csv" ) ## 48434, 16 var
 
 
-library(dplyr)
+library(dplyr) # mutate, 
 library(ggplot2)
-library(mosaic)
+library(mosaic) # rad2deg, 
 library(ggtern)
 library( reshape2 )
 library( data.table )
@@ -44,11 +44,11 @@ for (i in 1:nrow(data)) {
     if (data[i,15] > (data[i,12]+data[i,13])/2 & data[i,15] < data[i,13]) {data[i,21] = "bcc"}
     
     if ((data[i,13]+(450-data[i,13])/2)%%360 > 90 & data[i,15] > data[i,13] & data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360 |
-        (data[i,13]+(450-data[i,13])/2)%%360 < 90 & data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360) {data[i,21] = "cca"}
+        (data[i,13]+(450-data[i,13])/2)%%360 < 90 & (data[i,15] > data[i,13] & data[i,13] <= 360 | data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360)) {data[i,21] = "cca"}
     
     if ((data[i,13]+(450-data[i,13])/2)%%360 > 90 & (data[i,15] < 90 | data[i,15] > data[i,13]) |
         (data[i,13]+(450-data[i,13])/2)%%360 < 90 & data[i,15] > (data[i,13]+(450-data[i,13])/2)%%360 & data[i,15] < 90) {data[i,21] = "caa"}
-
+    
     if (data[i,15] == data[i,11]) {data[i,21] = "a"}
     if (data[i,15] == data[i,12]) {data[i,21] = "b"}
     if (data[i,15] == data[i,13]) {data[i,21] = "c"}
@@ -56,6 +56,39 @@ for (i in 1:nrow(data)) {
     if (data[i,15] == (data[i,11]+data[i,12])/2) {data[i,21] = "ab"}
     if (data[i,15] == (data[i,12]+data[i,13])/2) {data[i,21] = "bc"}
     if (data[i,15] == (data[i,13]+(450-data[i,13])/2)%%360) {data[i,21] = "ca"}}}
+
+for (i in 1:nrow(data)) {
+  if (data[i,3] == "delta"){
+    if (data[i,21] == "aab"){
+      if(-5 <= data[i,17])        {data[i,22] == 1} #17 = xc ; 18 = yc
+      if(-10 <= data[i,17] & data[i,17] < -5)  {data[i,22] == 2}
+      if(data[i,17] < -10)        {data[i,22] == 3}}
+    
+    if (data[i,21] == "abb"){
+      if(data[i,18] <= data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180)) {data[i,22] == 1} # 12 = angle.b
+      if(data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180) < data[i,18] & data[i,18] <= data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180)) {data[i,22] == 2}
+      if(data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180) < data[i,18]) {data[i,22] == 3}}
+    
+    if (data[i,21] == "bbc"){
+      if(data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180) <= data[i,18]) {data[i,22] == 1} # 12 = angle.b
+      if(data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180) <= data[i,18] & data[i,18] < data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180)) {data[i,22] == 2}
+      if(data[i,18] < data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180)) {data[i,22] == 3}}
+    
+    if (data[i,21] == "bcc"){
+      if(- data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13]) <= data[i,18]) {data[i,22] == 1} # 13 = angle.c
+      if(- data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13]) <= data[i,18] & data[i,18] < - data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13])) {data[i,22] == 2}
+      if(data[i,18] < - data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13])) {data[i,22] == 3}}
+    
+    if (data[i,21] == "cca"){
+      if(data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13])) {data[i,22] == 1} # 13 = angle.c
+      if(- data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13]) < data[i,18] & data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13])) {data[i,22] == 2}
+      if(- data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13]) < data[i,18]) {data[i,22] == 3}}
+    
+    if (data[i,21] == "caa"){
+      if(data[i,17] <= 5)       {data[i,22] == 1}
+      if(5 < data[i,17] & data[i,17] <= 10)  {data[i,22] == 2}
+      if(10 < data[i,17])       {data[i,22] == 3}}
+  }}
 
 # a=0;b=0;c=0;ab=0;bc=0;ca=0
 # 
@@ -70,131 +103,9 @@ for (i in 1:nrow(data)) {
 #     }}
 
 
-#minutie en groupe de radius:
-#0.5: x <= 0.5, 0.7: 0.5< x <= 0.7, 0.9: 0.7< x <= 0.9, 1: x>0.9
-for (i in 1:nrow(data)){
-  if (data[i,3] != "zone"){
-    if (data[i,14] <= 5){
-      data[i,22] = 0.5
-    } 
-    if (data[i,14] <= 7 & data[i,14] > 5){
-      data[i,22] = 0.7
-    }
-    if (data[i,14] <= 9 & data[i,14] > 7){
-      data[i,22] = 0.9
-    }
-    if (data[i,14] > 9){
-      data[i,22] = 1
-    }
-  }
-}
+
 
 ## Radar Chart
-radar.angle <- function (data, zone, main, angle, dist, title) {
-  tmp = subset(data, type==zone & d.g==main & V21==angle & V22==dist) ; print(nrow(tmp))
-  if (nrow(tmp) != 0) {
-  radar.tmp = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp)=c(seq(90,350,10),seq(0,80,10))
-  
-  for (i in tmp[,19]) { radar.tmp[1,round(i/10-9)%%36+1] = radar.tmp[1,round(i/10-9)%%36+1]+1 } ## tmp[,16] c'est theta, 19 pour tc
-  
-  radar.tmp = radar.tmp / sum(radar.tmp)*100 ; 
-  radar.tmp=rbind(rep(20,10) ,rep(0,10) , radar.tmp)
-  
-  radarchart( radar.tmp  , axistype=1 , 
-              pcol=rgb(0,0,1,0.9) , pfcol=rgb(0,0,1,0.5) , #custom polygon
-              cglcol="grey", cglty=1, axislabcol="grey", seg = 5, caxislabels=seq(0,25,5), cglwd=0.8, pty = 32, plty=1,  #custom the grid
-              vlcex=0.8 , centerzero=TRUE , #custom labels
-              title = title )
-  } else {print("No Value")}}
-
-
-
-radar.angle(data, "delta propre", "droit", "aab", 0.5, "aab 0.5" )
-radar.angle(data, "delta propre", "droit", "aab", 0.7, "aab 0.7" )
-radar.angle(data, "delta propre", "droit", "aab", 0.9, "aab 0.9" )
-radar.angle(data, "delta propre", "droit", "aab", 1.0, "aab 1.0" )
-
-radar.angle(data, "delta propre", "droit", "abb", 0.5, "abb 0.5" )
-radar.angle(data, "delta propre", "droit", "abb", 0.7, "abb 0.7" )
-radar.angle(data, "delta propre", "droit", "abb", 0.9, "abb 0.9" )
-radar.angle(data, "delta propre", "droit", "abb", 1.0, "abb 1.0" )
-
-radar.angle(data, "delta propre", "droit", "bbc", 0.5, "bbc 0.5" )
-radar.angle(data, "delta propre", "droit", "bbc", 0.7, "bbc 0.7" )
-radar.angle(data, "delta propre", "droit", "bbc", 0.9, "bbc 0.9" )
-radar.angle(data, "delta propre", "droit", "bbc", 1.0, "bbc 1.0" )
-
-radar.angle(data, "delta propre", "droit", "bcc", 0.5, "bcc 0.5" )
-radar.angle(data, "delta propre", "droit", "bcc", 0.7, "bcc 0.7" )
-radar.angle(data, "delta propre", "droit", "bcc", 0.9, "bcc 0.9" )
-radar.angle(data, "delta propre", "droit", "bcc", 1.0, "bcc 1.0" )
-
-radar.angle(data, "delta propre", "droit", "cca", 0.5, "cca 0.5" )
-radar.angle(data, "delta propre", "droit", "cca", 0.7, "cca 0.7" )
-radar.angle(data, "delta propre", "droit", "cca", 0.9, "cca 0.9" )
-radar.angle(data, "delta propre", "droit", "cca", 1.0, "cca 1.0" )
-
-radar.angle(data, "delta propre", "droit", "caa", 0.5, "caa 0.5" )
-radar.angle(data, "delta propre", "droit", "caa", 0.7, "caa 0.7" )
-radar.angle(data, "delta propre", "droit", "caa", 0.9, "caa 0.9" )
-radar.angle(data, "delta propre", "droit", "caa", 1.0, "caa 1.0" )
-
-
-
-
-radar2.angle <- function (data, zone, main, angle, dist, title) {
-  if (angle=="A"){ print ("A")
-    tmp1 = subset(data, type==zone & d.g==main & V21=="aab" & V22==dist) ; print(nrow(tmp1))
-    tmp2 = subset(data, type==zone & d.g==main & V21=="caa" & V22==dist) ; print(nrow(tmp2)) }
-  
-  if (angle=="B"){
-    tmp1 = subset(data, type==zone & d.g==main & V21=="abb" & V22==dist) ; print(nrow(tmp1))
-    tmp2 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==dist) ; print(nrow(tmp2)) }
-  
-  if (angle=="C"){
-    tmp1 = subset(data, type==zone & d.g==main & V21=="cca" & V22==dist) ; print(nrow(tmp1))
-    tmp2 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==dist) ; print(nrow(tmp2)) }
-  
-
-  radar.tmp1 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp1)=c(seq(90,350,10),seq(0,80,10))
-  radar.tmp2 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp2)=c(seq(90,350,10),seq(0,80,10))
-  
-  if (angle=="A"){
-    for (i in tmp1[,19]) { radar.tmp1[1,round(i/10-9)%%36+1] = radar.tmp1[1,round(i/10-9)%%36+1]+1 }
-    for (i in tmp2[,19]) { radar.tmp2[1,round(i/10-9)%%36+1] = radar.tmp2[1,round(i/10-9)%%36+1]+1 }
-    
-    radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2,c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
-  
-  if (angle=="B"){
-    for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1]+1 }
-    
-    radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2,c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
-  
-  if (angle=="C"){
-    for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1]+1 }
-    
-    radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2,c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
-    
-  radarchart( radar.tmp  , axistype=1 , 
-              pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.5), rgb(0,0,1,0.5),rgb(0,0,0)) , #custom polygon
-              cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8, pty = 32, plty=1, plwd=c(1,1,3), #custom the grid
-              vlcex=0.8 , centerzero=TRUE, #custom labels
-              title = title )
-}
-
-
-
-
-radar2.angle(data, "delta propre", "droit", "A", 0.5, "Angle a 0.5" )
-radar2.angle(data, "delta propre", "droit", "B", 0.5, "Angle b 0.5" )
-radar2.angle(data, "delta propre", "droit", "C", 0.5, "Angle c 0.5" )
-
-
 
 radar3.angle <- function (data, zone, main, angle, title) {
   
