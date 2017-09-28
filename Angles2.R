@@ -60,34 +60,34 @@ for (i in 1:nrow(data)) {
 for (i in 1:nrow(data)) {
   if (data[i,3] == "delta"){
     if (data[i,21] == "aab"){
-      if(-5 <= data[i,17])        {data[i,22] == 1} #17 = xc ; 18 = yc
-      if(-10 <= data[i,17] & data[i,17] < -5)  {data[i,22] == 2}
-      if(data[i,17] < -10)        {data[i,22] == 3}}
+      if(-5 <= data[i,17])        {data[i,22] = 1} #17 = xc ; 18 = yc
+      if(-10 <= data[i,17] & data[i,17] < -5)  {data[i,22] = 2}
+      if(data[i,17] < -10)        {data[i,22] = 3}}
     
     if (data[i,21] == "abb"){
-      if(data[i,18] <= data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180)) {data[i,22] == 1} # 12 = angle.b
-      if(data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180) < data[i,18] & data[i,18] <= data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180)) {data[i,22] == 2}
-      if(data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180) < data[i,18]) {data[i,22] == 3}}
+      if(data[i,18] <= data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180)) {data[i,22] = 1} # 12 = angle.b
+      if(data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180) < data[i,18] & data[i,18] <= data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180)) {data[i,22] = 2}
+      if(data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180) < data[i,18]) {data[i,22] = 3}}
     
     if (data[i,21] == "bbc"){
-      if(data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180) <= data[i,18]) {data[i,22] == 1} # 12 = angle.b
-      if(data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180) <= data[i,18] & data[i,18] < data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180)) {data[i,22] == 2}
-      if(data[i,18] < data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180)) {data[i,22] == 3}}
+      if(data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180) <= data[i,18]) {data[i,22] = 1} # 12 = angle.b
+      if(data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180) <= data[i,18] & data[i,18] < data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180)) {data[i,22] = 2}
+      if(data[i,18] < data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180)) {data[i,22] = 3}}
     
     if (data[i,21] == "bcc"){
-      if(- data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13]) <= data[i,18]) {data[i,22] == 1} # 13 = angle.c
-      if(- data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13]) <= data[i,18] & data[i,18] < - data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13])) {data[i,22] == 2}
-      if(data[i,18] < - data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13])) {data[i,22] == 3}}
+      if(- data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13]) <= data[i,18]) {data[i,22] = 1} # 13 = angle.c
+      if(- data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13]) <= data[i,18] & data[i,18] < - data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13])) {data[i,22] = 2}
+      if(data[i,18] < - data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13])) {data[i,22] = 3}}
     
     if (data[i,21] == "cca"){
-      if(data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13])) {data[i,22] == 1} # 13 = angle.c
-      if(- data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13]) < data[i,18] & data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13])) {data[i,22] == 2}
-      if(- data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13]) < data[i,18]) {data[i,22] == 3}}
+      if(data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13])) {data[i,22] = 1} # 13 = angle.c
+      if(- data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13]) < data[i,18] & data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13])) {data[i,22] = 2}
+      if(- data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13]) < data[i,18]) {data[i,22] = 3}}
     
     if (data[i,21] == "caa"){
-      if(data[i,17] <= 5)       {data[i,22] == 1}
-      if(5 < data[i,17] & data[i,17] <= 10)  {data[i,22] == 2}
-      if(10 < data[i,17])       {data[i,22] == 3}}
+      if(data[i,17] <= 5)       {data[i,22] = 1}
+      if(5 < data[i,17] & data[i,17] <= 10)  {data[i,22] = 2}
+      if(10 < data[i,17])       {data[i,22] = 3}}
   }}
 
 # a=0;b=0;c=0;ab=0;bc=0;ca=0
@@ -110,48 +110,41 @@ for (i in 1:nrow(data)) {
 radar3.angle <- function (data, zone, main, angle, title) {
   
   if (angle=="aab"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="aab" & V22==0.5) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="aab" & V22==0.7)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="aab" & V22==0.9) 
-    tmp4 = subset(data, type==zone & d.g==main & V21=="aab" & V22==1.0) }
+    tmp1 = subset(data, type==zone & d.g==main & V21=="aab" & V22==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V21=="aab" & V22==2)
+    tmp3 = subset(data, type==zone & d.g==main & V21=="aab" & V22==3)}
   
   if (angle=="abb"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="abb" & V22==0.5) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="abb" & V22==0.7)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="abb" & V22==0.9) 
-    tmp4 = subset(data, type==zone & d.g==main & V21=="abb" & V22==1.0)}
+    tmp1 = subset(data, type==zone & d.g==main & V21=="abb" & V22==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V21=="abb" & V22==2)
+    tmp3 = subset(data, type==zone & d.g==main & V21=="abb" & V22==3)}
   
   if (angle=="bbc"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==0.5) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==0.7)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==0.9) 
-    tmp4 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==1.0) }
+    tmp1 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==2)
+    tmp3 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==3)}
   
   if (angle=="bcc"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==0.5) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==0.7)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==0.9) 
-    tmp4 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==1.0) }
+    tmp1 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==2)
+    tmp3 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==3)}
   
   if (angle=="cca"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="cca" & V22==0.5) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="cca" & V22==0.7)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="cca" & V22==0.9) 
-    tmp4 = subset(data, type==zone & d.g==main & V21=="cca" & V22==1.0) }
+    tmp1 = subset(data, type==zone & d.g==main & V21=="cca" & V22==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V21=="cca" & V22==2)
+    tmp3 = subset(data, type==zone & d.g==main & V21=="cca" & V22==3)}
   
   if (angle=="caa"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="caa" & V22==0.5) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="caa" & V22==0.7)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="caa" & V22==0.9) 
-    tmp4 = subset(data, type==zone & d.g==main & V21=="caa" & V22==1.0) }
+    tmp1 = subset(data, type==zone & d.g==main & V21=="caa" & V22==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V21=="caa" & V22==2)
+    tmp3 = subset(data, type==zone & d.g==main & V21=="caa" & V22==3)}
   
-  print(nrow(tmp1));print(nrow(tmp2));print(nrow(tmp3));print(nrow(tmp4))
+  print(nrow(tmp1));print(nrow(tmp2));print(nrow(tmp3))
   
   
   radar.tmp1 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp1)=c(seq(90,350,10),seq(0,80,10))
   radar.tmp2 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp2)=c(seq(90,350,10),seq(0,80,10))
   radar.tmp3 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp3)=c(seq(90,350,10),seq(0,80,10))
-  radar.tmp4 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp4)=c(seq(90,350,10),seq(0,80,10))
   
   print("Test 0")
   
@@ -159,39 +152,36 @@ radar3.angle <- function (data, zone, main, angle, title) {
     for (i in tmp1[,19]) { radar.tmp1[1,round(i/10-9)%%36+1] = radar.tmp1[1,round(i/10-9)%%36+1]+1 }
     for (i in tmp2[,19]) { radar.tmp2[1,round(i/10-9)%%36+1] = radar.tmp2[1,round(i/10-9)%%36+1]+1 }
     for (i in tmp3[,19]) { radar.tmp3[1,round(i/10-9)%%36+1] = radar.tmp3[1,round(i/10-9)%%36+1]+1 }
-    for (i in tmp4[,19]) { radar.tmp4[1,round(i/10-9)%%36+1] = radar.tmp4[1,round(i/10-9)%%36+1]+1 }
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100 ; radar.tmp4 = radar.tmp4 / sum(radar.tmp4)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, radar.tmp4, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
+    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
+    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
   
   if (angle=="abb" | angle == "bbc"){print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp4)) { radar.tmp4[1,round((tmp4[i,19]-tmp4[i,12]+210)/10-9)%%36+1] = radar.tmp4[1,round((tmp4[i,19]-tmp4[i,12]+210)/10-9)%%36+1]+1 }
     
     print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100 ; radar.tmp4 = radar.tmp4 / sum(radar.tmp4)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , radar.tmp3, radar.tmp4 ,c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
+    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
+    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
   
   if (angle=="bcc" | angle=="cca"){print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp4)) { radar.tmp4[1,round((tmp4[i,19]-tmp4[i,13]+330)/10-9)%%36+1] = radar.tmp4[1,round((tmp4[i,19]-tmp4[i,13]+330)/10-9)%%36+1]+1 }
     
     print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100 ; radar.tmp4 = radar.tmp4 / sum(radar.tmp4)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, radar.tmp4 ,c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
+    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
+    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
   
   radarchart( radar.tmp  , axistype=1 , 
-              pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0,0.7),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0,0.1),rgb(0,0,0)) , #custom polygon
-              cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8, pty = 32, plty=1, plwd=c(1,1,1,1,3), #custom the grid
+              pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0)) , #custom polygon
+              cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8, pty = 32, plty=1, plwd=c(1,1,1,3), #custom the grid
               vlcex=0.8 , centerzero=TRUE, #custom labels
               title = title )
 }
