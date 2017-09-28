@@ -189,7 +189,10 @@ radar3.angle <- function (data, zone, main, angle, title) {
 
 pdf("Radar Chart.pdf",paper="a4",width=7.8,height=11.2)
 layout(matrix(c(seq(1,6,2),seq(2,6,2)),nrow=3,ncol=2))
+layout(matrix(c(1,4,1,2,4,5,2,1,5,3,1,6,3,7,6,1,7,1),nrow=3))
 par(oma=c(0,0,1.5,0)+0.1,mar=c(2,0,1,0)+0.1)
+
+plot.new()
 
 radar3.angle(data, "delta propre", "droit", "aab", "aab delta propre droit")
 radar3.angle(data, "delta propre", "droit", "caa", "caa delta propre droit")
