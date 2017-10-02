@@ -7,17 +7,20 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## The data
+
+100 fingerprint cards were choosen in order to get both thumbs having ulnar loops with at least 20 ridges between the delta and the core of the loop. The same was made to get cards with the clean delta and a control zone on each of the palms. The control zone was defined as a zone were the flow of the ridge is straight and parrallel situated in the thenar zone, just over the thumb.
+
+These different zones were extracted and croped with a 3 x 3 cm square. The part containing a delta were centered on it and the upper axis was placed north. For the control zone, the square was aligned with the edge of the print and the upper part on the middle line.
+
+For each image the minutiaes were annotated with their position and the orientation. These are represented in the plots separated by zones and hand.
+
+
 ```{r load Data, echo=FALSE, include=FALSE, warning=FALSE}
 # Préparation des données avec séparations entre deltas propre, de pouce et zone de controle----
 
 data = read.csv( paste(getwd(), "/data_all.csv",sep="" )) ## 48434 obs, 16 var
-```
 
-```{r Data summary, warning=FALSE}
-summary(data[,2:4])
-```
-
-```{r Work on Data, echo=FALSE, include=FALSE, warning=FALSE}
 library(dplyr) # mutate
 library(mosaic) # rad2deg
 library(spatstat) # ppp, Kest
@@ -49,7 +52,6 @@ controlG = subset(data, type=="zone de controle" & d.g=="gauche")
 
 ```
 
-## The data - Disc of diameter 15 mm
 
 ```{r plot data full, echo=FALSE, warning=FALSE}
 # Préparation des données avec séparations entre deltas propre, de pouce et zone de controle----
@@ -60,19 +62,24 @@ pcontrolDd15 = ppp(controlD[,17],controlD[,18], disc(7.5)) ; pcontrolGd15 = ppp(
 
 layout(matrix(c(1,2,3,4,5,6),nrow=2,ncol=3))
 par(oma = c(0,5,0,0) + 0.1,mar = c(0,0,0.9,0) + 0.1)
-plot(ppouceDd15,main="Thumb delta",cex.main=1, ylab="RIGHT", border=rgb(0,0,1))
-plot(ppouceGd15,main="", border=rgb(0,0,1)) 
-plot(ppropreDd15,main="Clean delta", border=rgb(0,0,1));plot(ppropreGd15,main="", border=rgb(0,0,1))
-plot(pcontrolDd15,main="Control zone", border=rgb(0,0,1));plot(pcontrolGd15,main="", border=rgb(0,0,1))
+plot(ppouceDd15,main="Thumb delta",cex.main=1, ylab="RIGHT", border=rgb(0,1,0))
+plot(ppouceGd15,main="", border=rgb(0,1,0)) 
+plot(ppropreDd15,main="Clean delta", border=rgb(0,1,0));plot(ppropreGd15,main="", border=rgb(0,1,0))
+plot(pcontrolDd15,main="Control zone", border=rgb(0,1,0));plot(pcontrolGd15,main="", border=rgb(0,1,0))
 title("", cex.main=2, outer=TRUE, font.lab=2, ylab="Left Hand                                      Right Hand",cex.lab=1.2)
 
 ```
 
-These are the minutiaes around the delta for 100 deltas on thumbs with a 
+The green circle is the window in which the analysis will be made. The diameter is of 1.5 cm which allows to avoid the problem of edge effects. The points out of this window won't be used for the analysis.
 
-## R Markdown
+\newpage
+## CSR testing
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+A CSR test (Complete Spatial Randomness) was done on each print individually. This was made using a second order K test accordingly to what was done in Chen and Moon 2006. 
+
+
+
+
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
