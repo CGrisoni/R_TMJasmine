@@ -10,8 +10,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load Data, echo=FALSE, include=FALSE, warning=FALSE}
 # Préparation des données avec séparations entre deltas propre, de pouce et zone de controle----
 
-data = read.csv( paste(getwd(), "/data_all.csv",sep="" )) ## 48434, 16 var
+data = read.csv( paste(getwd(), "/data_all.csv",sep="" )) ## 48434 obs, 16 var
+```
 
+```{r Data summary, warning=FALSE}
+summary(data[,2:4])
+```
+
+```{r Work on Data, echo=FALSE, include=FALSE, warning=FALSE}
 library(dplyr) # mutate
 library(mosaic) # rad2deg
 library(spatstat) # ppp, Kest
@@ -54,9 +60,10 @@ pcontrolDd15 = ppp(controlD[,17],controlD[,18], disc(7.5)) ; pcontrolGd15 = ppp(
 
 layout(matrix(c(1,2,3,4,5,6),nrow=2,ncol=3))
 par(oma = c(0,5,0,0) + 0.1,mar = c(0,0,0.9,0) + 0.1)
-plot(ppouceDd15,main="Thumb delta",cex.main=1, ylab="RIGHT");plot(ppouceGd15,main="") 
-plot(ppropreDd15,main="Clean delta");plot(ppropreGd15,main="")
-plot(pcontrolDd15,main="Control zone");plot(pcontrolGd15,main="")
+plot(ppouceDd15,main="Thumb delta",cex.main=1, ylab="RIGHT", border=rgb(0,0,1))
+plot(ppouceGd15,main="", border=rgb(0,0,1)) 
+plot(ppropreDd15,main="Clean delta", border=rgb(0,0,1));plot(ppropreGd15,main="", border=rgb(0,0,1))
+plot(pcontrolDd15,main="Control zone", border=rgb(0,0,1));plot(pcontrolGd15,main="", border=rgb(0,0,1))
 title("", cex.main=2, outer=TRUE, font.lab=2, ylab="Left Hand                                      Right Hand",cex.lab=1.2)
 
 ```
