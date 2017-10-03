@@ -5,7 +5,7 @@ data = read.csv( "/Users/CGrisoni/Documents/workspace/TM Jasmine/02_Extraction d
 
 library(ggplot2)
 library(spatstat)
-library(gridExtra)
+library(gridExtra) # tableGrob
 library(plotrix)
 library(dplyr)
 library(mosaic)
@@ -136,9 +136,9 @@ pdfCSR <- function(data,name){
     k=Kest(ppp,correction="Ripley",var.approx = TRUE,ratio= TRUE)
     edge =  c(-15,15) # c(-ceiling(max(c(2*sqrt(k$rip),k$t-pi * k$r^2))),ceiling(max(c(2*sqrt(k$rip),k$t-pi * k$r^2))))
     
-    plot(k,. - pi * r^2 ~ r,ylim=edge,main="",ylab="",xlab="",legend=FALSE)
-    lines(matrix(c(k$r,2*sqrt(k$rip)),ncol=2),lty=2,col="red")
-    lines(matrix(c(k$r,-2*sqrt(k$rip)),ncol=2),lty=2,col="red")
+    # plot(k,. - pi * r^2 ~ r,ylim=edge,main="",ylab="",xlab="",legend=FALSE)
+    # lines(matrix(c(k$r,2*sqrt(k$rip)),ncol=2),lty=2,col="red")
+    # lines(matrix(c(k$r,-2*sqrt(k$rip)),ncol=2),lty=2,col="red")
     
     mtext(name, outer=TRUE,  cex=1, line=0)
     
@@ -153,9 +153,8 @@ pdfCSR <- function(data,name){
       
       n=n+1
       if (csr==length(k$r)){CSR=CSR+1}
-      
     }
-    #print (d) ; print (csr) ; print(c)
+
     test=rbind(test,c(i,round(d/length(k$r)*100,1),round(csr/length(k$r)*100,1),round(c/length(k$r)*100,1)))
     if (c>d){cluster=cluster + 1}
     else if (c<d){dispersed=dispersed+1}

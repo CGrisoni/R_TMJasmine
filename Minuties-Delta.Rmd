@@ -1,6 +1,11 @@
 ---
 title: "Minuties-Delta"
+header-includes:
+- \usepackage{pdflscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
 output: pdf_document
+
 ---
 
 ```{r setup, include=FALSE}
@@ -21,9 +26,11 @@ For each image the minutiaes were annotated with their position and the orientat
 
 data = read.csv( paste(getwd(), "/data_all.csv",sep="" )) ## 48434 obs, 16 var
 
+library(ggplot2)
 library(dplyr) # mutate
 library(mosaic) # rad2deg
 library(spatstat) # ppp, Kest
+library(gridExtra) # tableGrob
 
 
 data = mutate( data, xc = x.minut - x.centre )
@@ -73,11 +80,92 @@ title("", cex.main=2, outer=TRUE, font.lab=2, ylab="Left Hand                   
 The green circle is the window in which the analysis will be made. The diameter is of 1.5 cm which allows to avoid the problem of edge effects. The points out of this window won't be used for the analysis.
 
 \newpage
+
 ## CSR testing
 
 A CSR test (Complete Spatial Randomness) was done on each print individually. This was made using a second order K test accordingly to what was done in Chen and Moon 2006. 
 
+\newpage
 
+```{r plot CSR, echo=FALSE, warning=FALSE, fig.height = 7.8, fig.width = 11.2}
+CSR <- function(data,name, plot = TRUE, summary = TRUE){
+  r<- seq(0,7.5, by=0.01) ; CSR=0 ; cluster = 0 ; dispersed = 0 ; cluster2 = 0 ; dispersed2 = 0 ; test = data.frame()
+  
+  for (i in unique(data[,1])){
+    datau = data.frame()
+    for (j in 1:nrow(data)){
+      if (data[j,1] == i){datau=rbind(datau,data[j,])}}
+    ppp = ppp(datau[,17],datau[,18],disc(7.5))
+    k=Kest(ppp,correction="Ripley",var.approx = TRUE,ratio= TRUE)
+    
+    n=1 ; d=0 ; c=0 ; csr=0 ; d2=0 ; c2=0
+    for (r in k$r) {
+      if (k$iso[n] - pi * r^2 < -2*sqrt(k$rip[n])) {d=d+1}
+      else if (k$iso[n] - pi * r^2 > 2*sqrt(k$rip[n])) {c=c+1}
+      else csr=csr+1
+      
+      if (k$iso[n] - pi * r^2 < -2*sqrt(k$rip[n]) & k$r[n]>2.5) {d2=d2+1}
+      else if (k$iso[n] - pi * r^2 > 2*sqrt(k$rip[n]) & k$r[n]>2.5) {c2=c2+1}
+      
+      n=n+1
+      if (csr==length(k$r)){CSR=CSR+1}
+    }
+    
+    test=rbind(test,c(i,round(d/length(k$r)*100,1),round(csr/length(k$r)*100,1),round(c/length(k$r)*100,1)))
+    if (c>d){cluster=cluster + 1}
+    else if (c<d){dispersed=dispersed+1}
+    
+    if (c2>d2){cluster2=cluster2 + 1}
+    else if (c2<d2){dispersed2=dispersed2+1}
+  
+  
+  if (plot) {
+    layout(matrix(c(seq(1,9,2),seq(2,10,2),seq(11,19,2),seq(12,20,2),seq(21,29,2),seq(22,30,2),seq(31,39,2),seq(32,40,2)),nrow=5,ncol=8))
+    par(oma=c(0,0,1.5,0)+0.1,mar=c(2,1.5,1,0)+0.1)
+    plot(ppp,main=i,cex=0.5)
+    
+    # c(-ceiling(max(c(2*sqrt(k$rip),k$t-pi * k$r^2))),ceiling(max(c(2*sqrt(k$rip),k$t-pi * k$r^2))))
+    plot(k,. - pi * r^2 ~ r,ylim=c(-15,15),main="",ylab="",xlab="",legend=FALSE)
+    lines(matrix(c(k$r,2*sqrt(k$rip)),ncol=2),lty=2,col="red") ; lines(matrix(c(k$r,-2*sqrt(k$rip)),ncol=2),lty=2,col="red")
+    # mtext(name, outer=TRUE,  cex=1, line=0)
+    }
+    }
+  
+  if (summary){
+    colnames(test)=c("ID","Dis", "CSR", "Clu")
+  
+    mytheme <- gridExtra::ttheme_default(
+      core = list(fg_params=list(cex = 0.75)),
+      colhead = list(fg_params=list(cex = 1.0)),
+      rowhead = list(fg_params=list(cex = 1.0)))
+  
+    t1=tableGrob(test[seq(1,20),],rows=NULL, theme = mytheme)
+    t2=tableGrob(test[seq(21,40),],rows=NULL, theme = mytheme)
+    t3=tableGrob(test[seq(41,60),],rows=NULL, theme = mytheme)
+    t4=tableGrob(test[seq(61,80),],rows=NULL, theme = mytheme)
+    t5=tableGrob(test[seq(81,100),],rows=NULL, theme = mytheme)
+    grid.arrange(t1,t2,t3,t4,t5, ncol=5)
+    
+    # mtext(name, outer=TRUE,  cex=1, line=-0)
+  }
+  
+  return c(CSR, cluster2, dispersed2)
+  
+  
+  # mtext(name, outer=TRUE,  cex=1, line=-0)
+  # mtext(paste(CSR," total CSR distributions, ",cluster," clustering and ",dispersed," dispersed",sep=""),outer = TRUE, cex=1,line=-52)
+  # mtext(paste("Over 2.5 mm, ",cluster2," clustering and ",dispersed2," dispersed",sep=""),outer = TRUE, cex=1,line=-54)
+  
+}
+
+datapouceD = CSR(pouceD,"PouceD",plot=FALSE, summary=FALSE) # 17
+print (datapouceD)
+#CSR(pouceG,"PouceG") # 7
+#CSR(propreD,"PropreD") # 29
+#CSR(propreG,"PropreG") # 24
+#CSR(controlD,"ControlD") # 69
+#CSR(controlG,"ControlG") # 74
+```
 
 
 
