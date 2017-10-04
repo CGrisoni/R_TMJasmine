@@ -85,9 +85,7 @@ The green circle is the window in which the analysis will be made. The diameter 
 
 A CSR test (Complete Spatial Randomness) was done on each print individually. This was made using a second order K test accordingly to what was done in Chen and Moon 2006. 
 
-\newpage
-
-```{r plot CSR, echo=FALSE, warning=FALSE, fig.height = 7.8, fig.width = 11.2}
+```{r plot CSR, echo=FALSE, warning=FALSE, fig.height=1.11, fig.width=2.95, fig.align="center", fig.show="hold"}
 CSR <- function(data,name, plot = TRUE, summary = TRUE){
   r<- seq(0,7.5, by=0.01) ; CSR=0 ; cluster = 0 ; dispersed = 0 ; cluster2 = 0 ; dispersed2 = 0 ; test = data.frame()
   
@@ -149,8 +147,7 @@ CSR <- function(data,name, plot = TRUE, summary = TRUE){
     # mtext(name, outer=TRUE,  cex=1, line=-0)
   }
   
-  return c(CSR, cluster2, dispersed2)
-  
+  return (c(CSR,dispersed2,cluster2,dispersed,cluster))
   
   # mtext(name, outer=TRUE,  cex=1, line=-0)
   # mtext(paste(CSR," total CSR distributions, ",cluster," clustering and ",dispersed," dispersed",sep=""),outer = TRUE, cex=1,line=-52)
@@ -158,16 +155,74 @@ CSR <- function(data,name, plot = TRUE, summary = TRUE){
   
 }
 
-datapouceD = CSR(pouceD,"PouceD",plot=FALSE, summary=FALSE) # 17
-print (datapouceD)
-#CSR(pouceG,"PouceG") # 7
-#CSR(propreD,"PropreD") # 29
-#CSR(propreG,"PropreG") # 24
-#CSR(controlD,"ControlD") # 69
-#CSR(controlG,"ControlG") # 74
+
+datapouced = CSR(pouceD,"PouceD",plot=FALSE, summary=FALSE) # 17
+datapouceg = CSR(pouceG,"PouceG",plot=FALSE, summary=FALSE) # 7
+datapropred = CSR(propreD,"PropreD",plot=FALSE, summary=FALSE) # 29
+datapropreg = CSR(propreG,"PropreG",plot=FALSE, summary=FALSE) # 24
+datacontrold = CSR(controlD,"ControlD",plot=FALSE, summary=FALSE) # 69
+datacontrolg = CSR(controlG,"ControlG",plot=FALSE, summary=FALSE) # 74
+print(datapouced) ; print(datapouceg) ; print(datapropred) ; print(datapropreg) ; print(datacontrold) ; print(datacontrolg)
+
+datafin=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+
+datafin[1,2] = datapouced[1] ; datafin[1,3] = datapouceg[1]
+datafin[2,2] = datapropred[1] ; datafin[2,3] = datapropreg[1]
+datafin[3,2] = datacontrold[1] ; datafin[3,3] = datacontrolg[1]
+
+datafin[1,4] = paste((datafin[1,2]+datafin[1,3]), " (", ((datafin[1,2]+datafin[1,3])/2)," %)",sep="")
+datafin[2,4] = paste((datafin[2,2]+datafin[2,3]), " (", ((datafin[2,2]+datafin[2,3])/2)," %)",sep="")
+datafin[3,4] = paste((datafin[3,2]+datafin[3,3]), " (", ((datafin[3,2]+datafin[3,3])/2)," %)",sep="")
+colnames(datafin) = c("", "Droit", "Gauche", "total (%)") ; datafin[1,1] = "Pouce" ; datafin[2,1] = "Propre" ; datafin[3,1] = "Control"
+
+datafin2=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+
+datafin2[1,2] = (100 - (datapouced[2] + datapouced[3]))     ; datafin2[1,3] = (100 - (datapouceg[2] + datapouceg[3]))
+datafin2[2,2] = (100 - (datapropred[2] + datapropred[3]))   ; datafin2[2,3] = (100 - (datapropreg[2] + datapropreg[3]))
+datafin2[3,2] = (100 - (datacontrold[2] + datacontrold[3])) ; datafin2[3,3] = (100 - (datacontrolg[2] + datacontrolg[3]))
+
+datafin2[1,4] = paste((datafin2[1,2]+datafin2[1,3]), " (", ((datafin2[1,2]+datafin2[1,3])/2)," %)",sep="")
+datafin2[2,4] = paste((datafin2[2,2]+datafin2[2,3]), " (", ((datafin2[2,2]+datafin2[2,3])/2)," %)",sep="")
+datafin2[3,4] = paste((datafin2[3,2]+datafin2[3,3]), " (", ((datafin2[3,2]+datafin2[3,3])/2)," %)",sep="")
+colnames(datafin2) = c("", "Droit", "Gauche", "total (%)") ; datafin2[1,1] = "Pouce" ; datafin2[2,1] = "Propre" ; datafin2[3,1] = "Control"
+
+plot(tableGrob(datafin,rows=NULL))
+plot(tableGrob(datafin2,rows=NULL))
 ```
 
+```{r plot Disp/Clust, echo=FALSE, warning=FALSE, fig.height=1.11, fig.width=4, fig.align="center", fig.show="hold"}
 
+datafin3=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+
+datafin3[1,2] = paste(datapouced[4]," / ",datapouced[5]) ; datafin3[1,3] = paste(datapouceg[4]," / ",datapouceg[5])
+datafin3[2,2] = paste(datapropred[4]," / ",datapropred[5]) ; datafin3[2,3] = paste(datapropreg[4]," / ",datapropreg[5])
+datafin3[3,2] = paste(datacontrold[4]," / ",datacontrold[5]) ; datafin3[3,3] = paste(datacontrolg[4]," / ",datacontrolg[5])
+
+datafin3[1,4] = paste(((datapouced[4]+datapouceg[4])/2), " / ", paste(((datapouced[5]+datapouceg[5])/2), 
+                                                                      " (", ((datapouced[4]+datapouceg[4])/2), " % / ", ((datapouced[5]+datapouceg[5])/2)," %)",sep=""))
+datafin3[2,4] = paste(((datapropred[4]+datapropreg[4])/2), " / ", paste(((datapropred[5]+datapropreg[5])/2),
+                                                                        " (", ((datapropred[4]+datapropreg[4])/2), " % / ", ((datapropred[5]+datapropreg[5])/2)," %)",sep=""))
+datafin3[3,4] = paste(((datacontrold[4]+datacontrolg[4])/2), " / ", paste(((datacontrold[5]+datacontrolg[5])/2),
+                                                                        " (", ((datacontrold[4]+datacontrolg[4])/2), " % / ", ((datacontrold[5]+datacontrolg[5])/2)," %)",sep=""))
+colnames(datafin3) = c("", "Droit", "Gauche", "total (%)") ; datafin3[1,1] = "Pouce" ; datafin3[2,1] = "Propre" ; datafin3[3,1] = "Control"
+
+datafin4=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+
+datafin4[1,2] = paste(datapouced[2]," / ",datapouced[3]) ; datafin4[1,3] = paste(datapouceg[2]," / ",datapouceg[3])
+datafin4[2,2] = paste(datapropred[2]," / ",datapropred[3]) ; datafin4[2,3] = paste(datapropreg[2]," / ",datapropreg[3])
+datafin4[3,2] = paste(datacontrold[2]," / ",datacontrold[3]) ; datafin4[3,3] = paste(datacontrolg[2]," / ",datacontrolg[3])
+
+datafin4[1,4] = paste(((datapouced[2]+datapouceg[2])/2), " / ", paste(((datapouced[3]+datapouceg[3])/2), 
+                    " (", ((datapouced[2]+datapouceg[2])/2), " % / ", ((datapouced[3]+datapouceg[3])/2)," %)",sep=""))
+datafin4[2,4] = paste(((datapropred[2]+datapropreg[2])/2), " / ", paste(((datapropred[3]+datapropreg[3])/2),
+                    " (", ((datapropred[2]+datapropreg[2])/2), " % / ", ((datapropred[3]+datapropreg[3])/2)," %)",sep=""))
+datafin4[3,4] = paste(((datacontrold[2]+datacontrolg[2])/2), " / ", paste(((datacontrold[5]+datacontrolg[5])/2),
+                    " (", ((datacontrold[2]+datacontrolg[2])/2), " % / ", ((datacontrold[3]+datacontrolg[3])/2)," %)",sep=""))
+colnames(datafin4) = c("", "Droit", "Gauche", "total (%)") ; datafin4[1,1] = "Pouce" ; datafin4[2,1] = "Propre" ; datafin4[3,1] = "Control"
+
+plot(tableGrob(datafin3,rows=NULL))
+plot(tableGrob(datafin4,rows=NULL))
+```
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
