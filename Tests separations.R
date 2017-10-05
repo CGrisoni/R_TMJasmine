@@ -81,3 +81,9 @@ plot(subset(data,type=="delta propre" & d.g=="droit" & V21=="cca")[,17:18],
 par(new=T)
 plot(subset(data,type=="delta propre" & d.g=="droit" & V21=="caa")[,17:18], 
      col="darkred",xlim=c(-20,20),ylim=c(-20,20))
+
+
+for (i in 1:nrow(data)) {
+  if (data[i,3]== "delta"){
+    if(((data[i,13]+90)%%360)/2 >= 90){print(i)}}}
+

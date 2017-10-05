@@ -40,6 +40,7 @@ data = mutate( data, t.minut=(t.minut+180)%%360)
 data = mutate( data, tc = t.minut - angle.correction)
 data = mutate( data, angle.bc = ((360-angle.b)-(360-angle.c)))
 data = mutate( data, theta = tc - phi) #nouveau: est adapté à l'angle de position de la minutie
+data = mutate( data, phi = phi + angle.correction) #intégration de la correction pour phi
 
 for (i in 1:nrow(data)) {
   if (data[i,20] < 0) {

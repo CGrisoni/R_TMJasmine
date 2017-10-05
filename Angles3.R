@@ -20,6 +20,7 @@ data = mutate( data, t.minut=(t.minut+180)%%360)
 data = mutate( data, tc = t.minut - angle.correction)
 data = mutate( data, angle.bc = ((360-angle.b)-(360-angle.c)))
 data = mutate( data, theta = tc - phi) #nouveau: est adapté à l'angle de position de la minutie
+data = mutate( data, phi = phi + angle.correction) #intégration de la correction pour phi
 
 for (i in 1:nrow(data)) {
   if (data[i,20] < 0) {
@@ -34,6 +35,8 @@ for (i in 1:nrow(data)) {
 #### Classer les minuties selon zone et distance: ----
 # minutie en aab, abb, bbc, bcc, cca, caa
 
+old <- Sys.time() # get start time
+
 for (i in 1:nrow(data)) {
   if (data[i,3]== "delta"){
     
@@ -43,11 +46,17 @@ for (i in 1:nrow(data)) {
     if (data[i,15] > data[i,12] & data[i,15] < (data[i,12]+data[i,13])/2) {data[i,21] = "bbc"}
     if (data[i,15] > (data[i,12]+data[i,13])/2 & data[i,15] < data[i,13]) {data[i,21] = "bcc"}
     
-    if ((data[i,13]+(450-data[i,13])/2)%%360 > 90 & data[i,15] > data[i,13] & data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360 |
-        (data[i,13]+(450-data[i,13])/2)%%360 < 90 & (data[i,15] > data[i,13] & data[i,13] <= 360 | data[i,15] < (data[i,13]+(450-data[i,13])/2)%%360)) {data[i,21] = "cca"}
     
-    if ((data[i,13]+(450-data[i,13])/2)%%360 > 90 & (data[i,15] < 90 | data[i,15] > data[i,13]) |
-        (data[i,13]+(450-data[i,13])/2)%%360 < 90 & data[i,15] > (data[i,13]+(450-data[i,13])/2)%%360 & data[i,15] < 90) {data[i,21] = "caa"}
+    
+    
+    if (((data[i,13]+90)%%360)/2 > 90 & data[i,15] > data[i,13] & data[i,15] < ((data[i,13]+90)%%360)/2 |
+        ((data[i,13]+90)%%360)/2 < 90 & (data[i,15] > data[i,13] | data[i,15] < ((data[i,13]+90)%%360)/2)) {data[i,21] = "cca"}
+    
+    
+    
+    
+    if (((data[i,13]+90)%%360)/2 > 90 & (data[i,15] < 90 | data[i,15] > data[i,13]) |
+        ((data[i,13]+90)%%360)/2 < 90 & data[i,15] > ((data[i,13]+90)%%360)/2 & data[i,15] < 90) {data[i,21] = "caa"}
     
     if (data[i,15] == data[i,11]) {data[i,21] = "a"}
     if (data[i,15] == data[i,12]) {data[i,21] = "b"}
@@ -56,6 +65,9 @@ for (i in 1:nrow(data)) {
     if (data[i,15] == (data[i,11]+data[i,12])/2) {data[i,21] = "ab"}
     if (data[i,15] == (data[i,12]+data[i,13])/2) {data[i,21] = "bc"}
     if (data[i,15] == (data[i,13]+(450-data[i,13])/2)%%360) {data[i,21] = "ca"}}}
+
+new <- Sys.time() - old # calculate difference
+print(new) # print in nice format
 
 for (i in 1:nrow(data)) {
   if (data[i,3] == "delta"){
