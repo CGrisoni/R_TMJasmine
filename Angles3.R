@@ -41,30 +41,33 @@ for (i in 1:nrow(data)) {
   if (data[i,3]== "delta"){
     
     if (data[i,15] > data[i,11] & data[i,15] < (data[i,11]+data[i,12])/2) {data[i,21] = "aab"}
-    if (data[i,15] > (data[i,11]+data[i,12])/2 & data[i,15] < data[i,12]) {data[i,21] = "abb"}
+    else if (data[i,15] > (data[i,11]+data[i,12])/2 & data[i,15] < data[i,12]) {data[i,21] = "abb"}
     
-    if (data[i,15] > data[i,12] & data[i,15] < (data[i,12]+data[i,13])/2) {data[i,21] = "bbc"}
-    if (data[i,15] > (data[i,12]+data[i,13])/2 & data[i,15] < data[i,13]) {data[i,21] = "bcc"}
-    
-    
-    
-    
-    if (((data[i,13]+90)%%360)/2 > 90 & data[i,15] > data[i,13] & data[i,15] < ((data[i,13]+90)%%360)/2 |
-        ((data[i,13]+90)%%360)/2 < 90 & (data[i,15] > data[i,13] | data[i,15] < ((data[i,13]+90)%%360)/2)) {data[i,21] = "cca"}
+    else if (data[i,15] > data[i,12] & data[i,15] < (data[i,12]+data[i,13])/2) {data[i,21] = "bbc"}
+    else if (data[i,15] > (data[i,12]+data[i,13])/2 & data[i,15] < data[i,13]) {data[i,21] = "bcc"}
     
     
     
+    else if (((data[i,13]+90)%%360)/2 > 90){print("Attention, ac > 90 !!!")}
     
-    if (((data[i,13]+90)%%360)/2 > 90 & (data[i,15] < 90 | data[i,15] > data[i,13]) |
+    else if (((data[i,13]+90)%%360)/2 < 90 & 
+        
+        ((data[i,13] > 90 & (data[i,15] > data[i,13] | data[i,15] < ((data[i,13]+90)%%360)/2)) |
+         
+         (data[i,13] < 90 & data[i,15] > data[i,13] & data[i,15] < ((data[i,13]+90)%%360)/2 ) )) {data[i,21] = "cca"}
+    
+    
+    
+    else if (((data[i,13]+90)%%360)/2 > 90 & (data[i,15] < 90 | data[i,15] > data[i,13]) |
         ((data[i,13]+90)%%360)/2 < 90 & data[i,15] > ((data[i,13]+90)%%360)/2 & data[i,15] < 90) {data[i,21] = "caa"}
     
-    if (data[i,15] == data[i,11]) {data[i,21] = "a"}
-    if (data[i,15] == data[i,12]) {data[i,21] = "b"}
-    if (data[i,15] == data[i,13]) {data[i,21] = "c"}
+    else if (data[i,15] == data[i,11]) {data[i,21] = "a"}
+    else if (data[i,15] == data[i,12]) {data[i,21] = "b"}
+    else if (data[i,15] == data[i,13]) {data[i,21] = "c"}
     
-    if (data[i,15] == (data[i,11]+data[i,12])/2) {data[i,21] = "ab"}
-    if (data[i,15] == (data[i,12]+data[i,13])/2) {data[i,21] = "bc"}
-    if (data[i,15] == (data[i,13]+(450-data[i,13])/2)%%360) {data[i,21] = "ca"}}}
+    else if (data[i,15] == (data[i,11]+data[i,12])/2) {data[i,21] = "ab"}
+    else if (data[i,15] == (data[i,12]+data[i,13])/2) {data[i,21] = "bc"}
+    else if (data[i,15] == ((data[i,13]+90)%%360)/2) {data[i,21] = "ca"}}}
 
 new <- Sys.time() - old # calculate difference
 print(new) # print in nice format

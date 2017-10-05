@@ -87,3 +87,9 @@ for (i in 1:nrow(data)) {
   if (data[i,3]== "delta"){
     if(((data[i,13]+90)%%360)/2 >= 90){print(i)}}}
 
+i=3888
+if (((data[i,13]+90)%%360)/2 < 90 & 
+    
+    ((data[i,13] > 90 & (data[i,15] > data[i,13] | data[i,15] < ((data[i,13]+90)%%360)/2)) |
+     
+     (data[i,13] < 90 & data[i,15] > data[i,13] & data[i,15] < ((data[i,13]+90)%%360)/2 ) )) {print("cca")}
