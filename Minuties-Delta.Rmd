@@ -63,9 +63,9 @@ controlG = subset(data, type=="zone de controle" & d.g=="gauche")
 ```{r plot data full, echo=FALSE, warning=FALSE}
 # Préparation des données avec séparations entre deltas propre, de pouce et zone de controle----
 
-ppouceDd15 = ppp(pouceD[,17],pouceD[,18], disc(7.5)) ; ppouceGd15 = ppp(pouceG[,17],pouceG[,18], disc(7.5))
-ppropreDd15 = ppp(propreD[,17],propreD[,18], disc(7.5)) ; ppropreGd15 = ppp(propreG[,17],propreG[,18], disc(7.5))
-pcontrolDd15 = ppp(controlD[,17],controlD[,18], disc(7.5)) ; pcontrolGd15 = ppp(controlG[,17],controlG[,18], disc(7.5))
+ppouceDd15 = ppp(pouceD[,17],pouceD[,18], disc(8)) ; ppouceGd15 = ppp(pouceG[,17],pouceG[,18], disc(8))
+ppropreDd15 = ppp(propreD[,17],propreD[,18], disc(8)) ; ppropreGd15 = ppp(propreG[,17],propreG[,18], disc(8))
+pcontrolDd15 = ppp(controlD[,17],controlD[,18], disc(8)) ; pcontrolGd15 = ppp(controlG[,17],controlG[,18], disc(8))
 
 layout(matrix(c(1,2,3,4,5,6),nrow=2,ncol=3))
 par(oma = c(0,5,0,0) + 0.1,mar = c(0,0,0.9,0) + 0.1)
@@ -77,7 +77,7 @@ title("", cex.main=2, outer=TRUE, font.lab=2, ylab="Left Hand                   
 
 ```
 
-The green circle is the window in which the analysis will be made. The diameter is of 1.5 cm which allows to avoid the problem of edge effects. The points out of this window won't be used for the analysis.
+The green circle is the window in which the analysis will be made. The diameter is of 1.6 cm which allows to avoid the problem of edge effects. The points out of this window won't be used for the analysis.
 
 \newpage
 
@@ -85,15 +85,15 @@ The green circle is the window in which the analysis will be made. The diameter 
 
 A CSR test (Complete Spatial Randomness) was done on each print individually. This was made using a second order K test accordingly to what was done in Chen and Moon 2006. 
 
-```{r plot CSR, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=2.94, fig.align="center", fig.show="hold"}
+```{r plot CSR, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=2.97, fig.align="center", fig.show="hold"}
 CSR <- function(data,name, plot = TRUE, summary = TRUE){
-  r<- seq(0,7.5, by=0.01) ; CSR=0 ; cluster = 0 ; dispersed = 0 ; cluster2 = 0 ; dispersed2 = 0 ; test = data.frame()
+  r<- seq(0,8, by=0.01) ; CSR=0 ; cluster = 0 ; dispersed = 0 ; cluster2 = 0 ; dispersed2 = 0 ; test = data.frame()
   
   for (i in unique(data[,1])){
     datau = data.frame()
     for (j in 1:nrow(data)){
       if (data[j,1] == i){datau=rbind(datau,data[j,])}}
-    ppp = ppp(datau[,17],datau[,18],disc(7.5))
+    ppp = ppp(datau[,17],datau[,18],disc(8))
     k=Kest(ppp,correction="Ripley",var.approx = TRUE,ratio= TRUE)
     
     n=1 ; d=0 ; c=0 ; csr=0 ; d2=0 ; c2=0
@@ -194,16 +194,16 @@ djiodjvid
 
 datafin3=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
-datafin3[1,2] = paste(datapouced[4]," / ",datapouced[5]) ; datafin3[1,3] = paste(datapouceg[4]," / ",datapouceg[5])
-datafin3[2,2] = paste(datapropred[4]," / ",datapropred[5]) ; datafin3[2,3] = paste(datapropreg[4]," / ",datapropreg[5])
-datafin3[3,2] = paste(datacontrold[4]," / ",datacontrold[5]) ; datafin3[3,3] = paste(datacontrolg[4]," / ",datacontrolg[5])
+datafin3[1,2] = paste(datapouced[4],"/",datapouced[5]) ; datafin3[1,3] = paste(datapouceg[4],"/",datapouceg[5])
+datafin3[2,2] = paste(datapropred[4],"/",datapropred[5]) ; datafin3[2,3] = paste(datapropreg[4],"/",datapropreg[5])
+datafin3[3,2] = paste(datacontrold[4],"/",datacontrold[5]) ; datafin3[3,3] = paste(datacontrolg[4],"/",datacontrolg[5])
 
-datafin3[1,4] = paste(((datapouced[4]+datapouceg[4])/2), " / ", paste(((datapouced[5]+datapouceg[5])/2), 
-                                                                      " (", ((datapouced[4]+datapouceg[4])/2), " % / ", ((datapouced[5]+datapouceg[5])/2)," %)",sep=""))
-datafin3[2,4] = paste(((datapropred[4]+datapropreg[4])/2), " / ", paste(((datapropred[5]+datapropreg[5])/2),
-                                                                        " (", ((datapropred[4]+datapropreg[4])/2), " % / ", ((datapropred[5]+datapropreg[5])/2)," %)",sep=""))
-datafin3[3,4] = paste(((datacontrold[4]+datacontrolg[4])/2), " / ", paste(((datacontrold[5]+datacontrolg[5])/2),
-                                                                        " (", ((datacontrold[4]+datacontrolg[4])/2), " % / ", ((datacontrold[5]+datacontrolg[5])/2)," %)",sep=""))
+datafin3[1,4] = paste(((datapouced[4]+datapouceg[4])/2), "/", paste(((datapouced[5]+datapouceg[5])/2), 
+                                                                      " (", ((datapouced[4]+datapouceg[4])/2), " % /", ((datapouced[5]+datapouceg[5])/2)," %)",sep=""))
+datafin3[2,4] = paste(((datapropred[4]+datapropreg[4])/2), "/", paste(((datapropred[5]+datapropreg[5])/2),
+                                                                        " (", ((datapropred[4]+datapropreg[4])/2), " % /", ((datapropred[5]+datapropreg[5])/2)," %)",sep=""))
+datafin3[3,4] = paste(((datacontrold[4]+datacontrolg[4])/2), "/", paste(((datacontrold[5]+datacontrolg[5])/2),
+                                                                        " (", ((datacontrold[4]+datacontrolg[4])/2), " % /", ((datacontrold[5]+datacontrolg[5])/2)," %)",sep=""))
 colnames(datafin3) = c("", "Droit", "Gauche", "total (%)") ; datafin3[1,1] = "Pouce" ; datafin3[2,1] = "Propre" ; datafin3[3,1] = "Control"
 
 plot(tableGrob(datafin3,rows=NULL))
@@ -214,16 +214,16 @@ dvsduvhiuvs
 ```{r plot Disp/Clust 2, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=3.98, fig.align="center"}
 datafin4=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
-datafin4[1,2] = paste(datapouced[2]," / ",datapouced[3]) ; datafin4[1,3] = paste(datapouceg[2]," / ",datapouceg[3])
-datafin4[2,2] = paste(datapropred[2]," / ",datapropred[3]) ; datafin4[2,3] = paste(datapropreg[2]," / ",datapropreg[3])
-datafin4[3,2] = paste(datacontrold[2]," / ",datacontrold[3]) ; datafin4[3,3] = paste(datacontrolg[2]," / ",datacontrolg[3])
+datafin4[1,2] = paste(datapouced[2],"/",datapouced[3]) ; datafin4[1,3] = paste(datapouceg[2],"/",datapouceg[3])
+datafin4[2,2] = paste(datapropred[2],"/",datapropred[3]) ; datafin4[2,3] = paste(datapropreg[2],"/",datapropreg[3])
+datafin4[3,2] = paste(datacontrold[2],"/",datacontrold[3]) ; datafin4[3,3] = paste(datacontrolg[2],"/",datacontrolg[3])
 
-datafin4[1,4] = paste(((datapouced[2]+datapouceg[2])/2), " / ", paste(((datapouced[3]+datapouceg[3])/2), 
-                    " (", ((datapouced[2]+datapouceg[2])/2), " % / ", ((datapouced[3]+datapouceg[3])/2)," %)",sep=""))
-datafin4[2,4] = paste(((datapropred[2]+datapropreg[2])/2), " / ", paste(((datapropred[3]+datapropreg[3])/2),
-                    " (", ((datapropred[2]+datapropreg[2])/2), " % / ", ((datapropred[3]+datapropreg[3])/2)," %)",sep=""))
-datafin4[3,4] = paste(((datacontrold[2]+datacontrolg[2])/2), " / ", paste(((datacontrold[5]+datacontrolg[5])/2),
-                    " (", ((datacontrold[2]+datacontrolg[2])/2), " % / ", ((datacontrold[3]+datacontrolg[3])/2)," %)",sep=""))
+datafin4[1,4] = paste(((datapouced[2]+datapouceg[2])/2), "/", paste(((datapouced[3]+datapouceg[3])/2), 
+                    " (", ((datapouced[2]+datapouceg[2])/2), " % /", ((datapouced[3]+datapouceg[3])/2)," %)",sep=""))
+datafin4[2,4] = paste(((datapropred[2]+datapropreg[2])/2), "/", paste(((datapropred[3]+datapropreg[3])/2),
+                    " (", ((datapropred[2]+datapropreg[2])/2), " % /", ((datapropred[3]+datapropreg[3])/2)," %)",sep=""))
+datafin4[3,4] = paste(((datacontrold[2]+datacontrolg[2])/2), "/", paste(((datacontrold[5]+datacontrolg[5])/2),
+                    " (", ((datacontrold[2]+datacontrolg[2])/2), " % /", ((datacontrold[3]+datacontrolg[3])/2)," %)",sep=""))
 colnames(datafin4) = c("", "Droit", "Gauche", "total (%)") ; datafin4[1,1] = "Pouce" ; datafin4[2,1] = "Propre" ; datafin4[3,1] = "Control"
 
 plot(tableGrob(datafin4,rows=NULL))
