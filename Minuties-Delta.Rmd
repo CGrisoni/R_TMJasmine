@@ -190,7 +190,7 @@ plot(tableGrob(datafin,rows=NULL))
 plot(tableGrob(datafin2,rows=NULL))
 ```
 
-```{r plot Disp/Clust, echo=FALSE, warning=FALSE, fig.height=1.11, fig.width=4, fig.align="center", fig.show="hold"}
+```{r plot Disp/Clust, echo=FALSE, warning=FALSE, fig.height=1.11, fig.width=4.3, fig.align="center", fig.show="hold"}
 
 datafin3=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
