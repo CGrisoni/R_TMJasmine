@@ -14,95 +14,98 @@ library(plotrix) # polar plot
 
 # calculs de base sur la liste des données
 data = mutate( data, xc = x.minut - x.centre )
-data = mutate( data, yc = y.minut - y.centre ) 
+data = mutate( data, yc = y.minut - y.centre )
 data = mutate( data, angle.correction = rad2deg(angle.correction))
 data = mutate( data, t.minut=(t.minut+180)%%360)
 data = mutate( data, tc = t.minut - angle.correction)
-data = mutate( data, angle.bc = ((360-angle.b)-(360-angle.c)))
+data = mutate( data, angledif.bc = ((360-angle.b)-(360-angle.c)))
 data = mutate( data, theta = tc - phi) #nouveau: est adapté à l'angle de position de la minutie
-data = mutate( data, phi = phi + angle.correction) #intégration de la correction pour phi
+
+# Modification / ajout CG
+data = mutate( data, phi = (phi + angle.correction - 90)%%360) #intégration de la correction pour phi
+data = mutate( data, angle.a = angle.a -90)
+data = mutate( data, angle.b = angle.b -90)
+data = mutate( data, angle.c = (angle.c -90)%%360)
+
+data = mutate( data, angle.ab = (angle.a + angle.b)/2)
+data = mutate( data, angle.bc = (angle.b + angle.c)/2)
+data = mutate( data, angle.ca = (angle.c + (360 - angle.c)/2))
 
 for (i in 1:nrow(data)) {
-  if (data[i,20] < 0) {
-    data[i,20] = data[i,20] + 360 
+  if (data[i,"angledif.bc"] < 0) {
+    data[i,"angledif.bc"] = data[i,"angledif.bc"] + 360 
   } 
-  if (data[i,16] < 0){
-    data[i,16] = data[i,16] + 360
+  if (data[i,"theta"] < 0){
+    data[i,"theta"] = data[i,"theta"] + 360
   }
 }
 
 
 #### Classer les minuties selon zone et distance: ----
-# minutie en aab, abb, bbc, bcc, cca, caa
+# minutie en aab, abb, bbc, bcc, cca, caa QUI FONCTIONNE
 
 old <- Sys.time() # get start time
 
 for (i in 1:nrow(data)) {
-  if (data[i,3]== "delta"){
+  if (data[i,"delta"] == "delta"){
+    if      (data[i,"angle.a"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ab"]) {data[i,24] = "aab"}
+    else if (data[i,"angle.ab"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.b"])  {data[i,24] = "abb"}
     
-    if (data[i,15] > data[i,11] & data[i,15] < (data[i,11]+data[i,12])/2) {data[i,21] = "aab"}
-    else if (data[i,15] > (data[i,11]+data[i,12])/2 & data[i,15] < data[i,12]) {data[i,21] = "abb"}
+    else if (data[i,"angle.b"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.bc"]) {data[i,24] = "bbc"}
+    else if (data[i,"angle.bc"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.c"])  {data[i,24] = "bcc"}
     
-    else if (data[i,15] > data[i,12] & data[i,15] < (data[i,12]+data[i,13])/2) {data[i,21] = "bbc"}
-    else if (data[i,15] > (data[i,12]+data[i,13])/2 & data[i,15] < data[i,13]) {data[i,21] = "bcc"}
+    else if (data[i,"angle.c"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ca"]) {data[i,24] = "cca"}
+    else if (data[i,"angle.ca"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.a"]+360)  {data[i,24] = "caa"}
     
+    else if (data[i,"phi"] == data[i,"angle.a"]) {data[i,24] = "a"}
+    else if (data[i,"phi"] == data[i,"angle.b"]) {data[i,24] = "b"}
+    else if (data[i,"phi"] == data[i,"angle.c"]) {data[i,24] = "c"}
     
+    else if (data[i,"phi"] == data[i,"angle.ab"]) {data[i,24] = "ab"}
+    else if (data[i,"phi"] == data[i,"angle.bc"]) {data[i,24] = "bc"}
+    else if (data[i,"phi"] == data[i,"angle.ca"]) {data[i,24] = "ca"}
     
-    else if (((data[i,13]+90)%%360)/2 > 90){print("Attention, ac > 90 !!!")}
-    
-    else if (((data[i,13]+90)%%360)/2 < 90 & 
-        
-        ((data[i,13] > 90 & (data[i,15] > data[i,13] | data[i,15] < ((data[i,13]+90)%%360)/2)) |
-         
-         (data[i,13] < 90 & data[i,15] > data[i,13] & data[i,15] < ((data[i,13]+90)%%360)/2 ) )) {data[i,21] = "cca"}
-    
-    
-    
-    else if (((data[i,13]+90)%%360)/2 > 90 & (data[i,15] < 90 | data[i,15] > data[i,13]) |
-        ((data[i,13]+90)%%360)/2 < 90 & data[i,15] > ((data[i,13]+90)%%360)/2 & data[i,15] < 90) {data[i,21] = "caa"}
-    
-    else if (data[i,15] == data[i,11]) {data[i,21] = "a"}
-    else if (data[i,15] == data[i,12]) {data[i,21] = "b"}
-    else if (data[i,15] == data[i,13]) {data[i,21] = "c"}
-    
-    else if (data[i,15] == (data[i,11]+data[i,12])/2) {data[i,21] = "ab"}
-    else if (data[i,15] == (data[i,12]+data[i,13])/2) {data[i,21] = "bc"}
-    else if (data[i,15] == ((data[i,13]+90)%%360)/2) {data[i,21] = "ca"}}}
+    else {print ("Error")}
+    }}
 
 new <- Sys.time() - old # calculate difference
 print(new) # print in nice format
 
-for (i in 1:nrow(data)) {
-  if (data[i,3] == "delta"){
-    if (data[i,21] == "aab"){
-      if(-5 <= data[i,17])        {data[i,22] = 1} #17 = xc ; 18 = yc
-      if(-10 <= data[i,17] & data[i,17] < -5)  {data[i,22] = 2}
-      if(data[i,17] < -10)        {data[i,22] = 3}}
+for (i in 1:nrow(data)) {#print(i)
+  if (data[i,"delta"] == "delta"){
+    if (data[i,24] == "aab"){
+      if(-5 <= data[i,"xc"])                            {data[i,25] = 1} #17 = xc ; 18 = yc
+      else if(-10 <= data[i,"xc"] & data[i,"xc"] < -5)  {data[i,25] = 2}
+      else if(data[i,"xc"] < -10)                       {data[i,25] = 3}}
     
-    if (data[i,21] == "abb"){
-      if(data[i,18] <= data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180)) {data[i,22] = 1} # 12 = angle.b
-      if(data[i,17]/cos(data[i,12]-180) + 5/sin(data[i,12]-180) < data[i,18] & data[i,18] <= data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180)) {data[i,22] = 2}
-      if(data[i,17]/cos(data[i,12]-180) + 10/sin(data[i,12]-180) < data[i,18]) {data[i,22] = 3}}
+    else if (data[i,24] == "abb"){
+      if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(90-abs(data[i,"angle.b"]-180))) + 5)                    {data[i,25] = 1} # 12 = angle.b
+      else if(          (data[i,"xc"]*tan(deg2rad(90-abs(data[i,"angle.b"]-180))) + 5) < data[i,"yc"] & 
+         data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(90-abs(data[i,"angle.b"]-180))) + 10)    {data[i,25] = 2}
+      else if(          (data[i,"xc"]*tan(deg2rad(90-abs(data[i,"angle.b"]-180))) + 10) < data[i,"yc"])    {data[i,25] = 3}}
     
-    if (data[i,21] == "bbc"){
-      if(data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180) <= data[i,18]) {data[i,22] = 1} # 12 = angle.b
-      if(data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180) <= data[i,18] & data[i,18] < data[i,17]/cos(data[i,12]-180) - 5/sin(data[i,12]-180)) {data[i,22] = 2}
-      if(data[i,18] < data[i,17]/cos(data[i,12]-180) - 10/sin(data[i,12]-180)) {data[i,22] = 3}}
+    else if (data[i,24] == "bbc"){
+      if(data[i,"xc"]/cos(data[i,12]-180) - 5/sin(data[i,12]-180) <= data[i,"yc"])          {data[i,25] = 1} # 12 = angle.b
+      else if(data[i,"xc"]/cos(data[i,12]-180) - 10/sin(data[i,12]-180) <= data[i,"yc"] & 
+              data[i,"yc"] < data[i,"xc"]/cos(data[i,12]-180) - 5/sin(data[i,12]-180))      {data[i,25] = 2}
+      else if(data[i,"yc"] < data[i,"xc"]/cos(data[i,12]-180) - 10/sin(data[i,12]-180))     {data[i,25] = 3}}
     
-    if (data[i,21] == "bcc"){
-      if(- data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13]) <= data[i,18]) {data[i,22] = 1} # 13 = angle.c
-      if(- data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13]) <= data[i,18] & data[i,18] < - data[i,17]/cos(360-data[i,13]) - 5/sin(360-data[i,13])) {data[i,22] = 2}
-      if(data[i,18] < - data[i,17]/cos(360-data[i,13]) - 10/sin(360-data[i,13])) {data[i,22] = 3}}
+    else if (data[i,24] == "bcc"){
+      if(- data[i,"xc"]/cos(360-data[i,13]) - 5/sin(360-data[i,13]) <= data[i,"yc"])        {data[i,25] = 1} # 13 = angle.c
+      else if(- data[i,"xc"]/cos(360-data[i,13]) - 10/sin(360-data[i,13]) <= data[i,"yc"] & 
+              data[i,"yc"] < - data[i,"xc"]/cos(360-data[i,13]) - 5/sin(360-data[i,13]))    {data[i,25] = 2}
+      else if(data[i,"yc"] < - data[i,"xc"]/cos(360-data[i,13]) - 10/sin(360-data[i,13]))   {data[i,25] = 3}}
     
-    if (data[i,21] == "cca"){
-      if(data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13])) {data[i,22] = 1} # 13 = angle.c
-      if(- data[i,17]/cos(360-data[i,13]) + 5/sin(360-data[i,13]) < data[i,18] & data[i,18] <= - data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13])) {data[i,22] = 2}
-      if(- data[i,17]/cos(360-data[i,13]) + 10/sin(360-data[i,13]) < data[i,18]) {data[i,22] = 3}}
+    else if (data[i,24] == "cca"){
+      if(data[i,"yc"] <= - data[i,"xc"]/cos(360-data[i,13]) + 5/sin(360-data[i,13]))        {data[i,25] = 1} # 13 = angle.c
+      else if(- data[i,"xc"]/cos(360-data[i,13]) + 5/sin(360-data[i,13]) < data[i,"yc"] & 
+              data[i,"yc"] <= - data[i,"xc"]/cos(360-data[i,13]) + 10/sin(360-data[i,13]))  {data[i,25] = 2}
+      else if(- data[i,"xc"]/cos(360-data[i,13]) + 10/sin(360-data[i,13]) < data[i,"yc"])   {data[i,25] = 3}}
     
-    if (data[i,21] == "caa"){
-      if(data[i,17] <= 5)       {data[i,22] = 1}
-      if(5 < data[i,17] & data[i,17] <= 10)  {data[i,22] = 2}
-      if(10 < data[i,17])       {data[i,22] = 3}}
+    else if (data[i,24] == "caa"){
+      if(data[i,"xc"] <= 5)                           {data[i,25] = 1}
+      else if(5 < data[i,"xc"] & data[i,"xc"] <= 10)  {data[i,25] = 2}
+      else if(10 < data[i,"xc"])                      {data[i,25] = 3}}
   }}
 
 # a=0;b=0;c=0;ab=0;bc=0;ca=0
