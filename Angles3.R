@@ -91,16 +91,16 @@ for (i in 1:nrow(data)) {#print(i)
       else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 10/sin(deg2rad(data[i,"angle.b"]))))    {data[i,25] = 3}}
     
     else if (data[i,24] == "bcc"){
-      if(data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 5 <= data[i,"yc"])                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) -10) < data[i,"yc"] & 
-                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 5)    {data[i,25] = 2}
-      else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 10))    {data[i,25] = 3}}
+      if(data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 5/sin(deg2rad(data[i,"angle.c"])) <= data[i,"yc"])                    {data[i,25] = 1}
+      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 10/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
+                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 5/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
+      else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 10/sin(deg2rad(data[i,"angle.c"]))))    {data[i,25] = 3}}
     
     else if (data[i,24] == "cca"){
-      if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 5)                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 5) < data[i,"yc"] & 
-                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 10)    {data[i,25] = 2}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 10) < data[i,"yc"])    {data[i,25] = 3}}
+      if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 5/sin(deg2rad(data[i,"angle.c"])))                    {data[i,25] = 1}
+      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 5/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
+                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 10/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
+      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 10/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"])    {data[i,25] = 3}}
     
     else if (data[i,24] == "caa"){
       if(data[i,"xc"] <= 5)                           {data[i,25] = 1}
@@ -128,34 +128,34 @@ for (i in 1:nrow(data)) {#print(i)
 radar3.angle <- function (data, zone, main, angle, title) {
   
   if (angle=="aab"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="aab" & V22==1) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="aab" & V22==2)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="aab" & V22==3)}
+    tmp1 = subset(data, type==zone & d.g==main & V24=="aab" & V25==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V24=="aab" & V25==2)
+    tmp3 = subset(data, type==zone & d.g==main & V24=="aab" & V25==3)}
   
   if (angle=="abb"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="abb" & V22==1) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="abb" & V22==2)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="abb" & V22==3)}
+    tmp1 = subset(data, type==zone & d.g==main & V24=="abb" & V25==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V24=="abb" & V25==2)
+    tmp3 = subset(data, type==zone & d.g==main & V24=="abb" & V25==3)}
   
   if (angle=="bbc"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==1) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==2)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="bbc" & V22==3)}
+    tmp1 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==2)
+    tmp3 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==3)}
   
   if (angle=="bcc"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==1) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==2)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="bcc" & V22==3)}
+    tmp1 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==2)
+    tmp3 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==3)}
   
   if (angle=="cca"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="cca" & V22==1) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="cca" & V22==2)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="cca" & V22==3)}
+    tmp1 = subset(data, type==zone & d.g==main & V24=="cca" & V25==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V24=="cca" & V25==2)
+    tmp3 = subset(data, type==zone & d.g==main & V24=="cca" & V25==3)}
   
   if (angle=="caa"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V21=="caa" & V22==1) 
-    tmp2 = subset(data, type==zone & d.g==main & V21=="caa" & V22==2)
-    tmp3 = subset(data, type==zone & d.g==main & V21=="caa" & V22==3)}
+    tmp1 = subset(data, type==zone & d.g==main & V24=="caa" & V25==1) 
+    tmp2 = subset(data, type==zone & d.g==main & V24=="caa" & V25==2)
+    tmp3 = subset(data, type==zone & d.g==main & V24=="caa" & V25==3)}
   
   print(nrow(tmp1));print(nrow(tmp2));print(nrow(tmp3))
   
