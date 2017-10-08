@@ -89,8 +89,8 @@ for (i in unique(z[,1])){
       par(new=T)
       plot(subset(zu, V24=="abb" & V25==3)[,17:18], 
            col="darkred",xlim=c(-20,20),ylim=c(-20,20),main=i)
-      abline(0,tan(deg2rad(90-abs(z[which(z$No. == i)[1][1],"angle.b"]-180))))
-      abline(5,tan(deg2rad(90-abs(z[which(z$No. == i)[1][1],"angle.b"]-180))))
-      abline(10,tan(deg2rad(90-abs(z[which(z$No. == i)[1][1],"angle.b"]-180))))
+      abline(0,tan(deg2rad(z[which(z$No. == i)[1][1],"angle.b"]+90)))
+      abline(5,tan(deg2rad(z[which(z$No. == i)[1][1],"angle.b"]+90)))
+      abline(10,tan(deg2rad(z[which(z$No. == i)[1][1],"angle.b"]+90)))
     }
 dev.off()
