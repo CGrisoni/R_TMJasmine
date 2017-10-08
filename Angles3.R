@@ -79,16 +79,16 @@ for (i in 1:nrow(data)) {#print(i)
       else if(data[i,"xc"] < -10)                       {data[i,25] = 3}}
     
     else if (data[i,24] == "abb"){
-      if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 5)                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 5) < data[i,"yc"] & 
-         data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 10)    {data[i,25] = 2}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 10) < data[i,"yc"])    {data[i,25] = 3}}
+      if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 5/sin(deg2rad(data[i,"angle.b"])))                    {data[i,25] = 1}
+      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 5/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
+         data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 10/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
+      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 10/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"])    {data[i,25] = 3}}
     
     else if (data[i,24] == "bbc"){
-      if(data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 5 <= data[i,"yc"])                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) -10) < data[i,"yc"] & 
-                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 5)    {data[i,25] = 2}
-      else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 10))    {data[i,25] = 3}}
+      if(data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 5/sin(deg2rad(data[i,"angle.b"])) <= data[i,"yc"])                    {data[i,25] = 1}
+      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) -10/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
+                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 5/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
+      else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 10/sin(deg2rad(data[i,"angle.b"]))))    {data[i,25] = 3}}
     
     else if (data[i,24] == "bcc"){
       if(data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 5 <= data[i,"yc"])                    {data[i,25] = 1}
