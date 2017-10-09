@@ -32,10 +32,10 @@ library(mosaic) # rad2deg
 library(spatstat) # ppp, Kest
 library(gridExtra) # tableGrob
 library(fmsb) # radar chart
+library(png)
 
 
-data = mutate( data, xc = x.minut - x.centre )
-data = mutate( data, yc = y.minut - y.centre )
+data = mutate( data, xc = x.minut - x.centre ) ; data = mutate( data, yc = y.minut - y.centre )
 data = mutate( data, angle.correction = rad2deg(angle.correction))
 data = mutate( data, t.minut=(t.minut+180)%%360)
 data = mutate( data, tc = t.minut - angle.correction)
@@ -44,9 +44,7 @@ data = mutate( data, theta = tc - phi) #nouveau: est adapté à l'angle de posit
 
 # Modification / ajout CG
 data = mutate( data, phi = (phi + angle.correction - 90)%%360) #intégration de la correction pour phi
-data = mutate( data, angle.a = angle.a -90)
-data = mutate( data, angle.b = angle.b -90)
-data = mutate( data, angle.c = (angle.c -90)%%360)
+data = mutate( data, angle.a = angle.a -90) ; data = mutate( data, angle.b = angle.b -90) ; data = mutate( data, angle.c = (angle.c -90)%%360)
 
 data = mutate( data, angle.ab = (angle.a + angle.b)/2)
 data = mutate( data, angle.bc = (angle.b + angle.c)/2)
@@ -74,16 +72,16 @@ controlG = subset(data, type=="zone de controle" & d.g=="gauche")
 ```{r plot data full, echo=FALSE, warning=FALSE}
 # Préparation des données avec séparations entre deltas propre, de pouce et zone de controle----
 
-ppouceDd15 = ppp(pouceD[,17],pouceD[,18], disc(8)) ; ppouceGd15 = ppp(pouceG[,17],pouceG[,18], disc(8))
-ppropreDd15 = ppp(propreD[,17],propreD[,18], disc(8)) ; ppropreGd15 = ppp(propreG[,17],propreG[,18], disc(8))
-pcontrolDd15 = ppp(controlD[,17],controlD[,18], disc(8)) ; pcontrolGd15 = ppp(controlG[,17],controlG[,18], disc(8))
+ppouceD = ppp(pouceD[,17],pouceD[,18], disc(8)) ; ppouceG = ppp(pouceG[,17],pouceG[,18], disc(8))
+ppropreD = ppp(propreD[,17],propreD[,18], disc(8)) ; ppropreG = ppp(propreG[,17],propreG[,18], disc(8))
+pcontrolD = ppp(controlD[,17],controlD[,18], disc(8)) ; pcontrolG = ppp(controlG[,17],controlG[,18], disc(8))
 
 layout(matrix(c(1,2,3,4,5,6),nrow=2,ncol=3))
 par(oma = c(0,5,0,0) + 0.1,mar = c(0,0,0.9,0) + 0.1)
-plot(ppouceDd15,main="Thumb delta",cex.main=1, ylab="RIGHT", border=rgb(0,1,0))
-plot(ppouceGd15,main="", border=rgb(0,1,0)) 
-plot(ppropreDd15,main="Clean delta", border=rgb(0,1,0));plot(ppropreGd15,main="", border=rgb(0,1,0))
-plot(pcontrolDd15,main="Control zone", border=rgb(0,1,0));plot(pcontrolGd15,main="", border=rgb(0,1,0))
+plot(ppouceD,main="Thumb delta",cex.main=1, ylab="RIGHT", border=rgb(0,1,0))
+plot(ppouceG,main="", border=rgb(0,1,0)) 
+plot(ppropreD,main="Clean delta", border=rgb(0,1,0));plot(ppropreG,main="", border=rgb(0,1,0))
+plot(pcontrolD,main="Control zone", border=rgb(0,1,0));plot(pcontrolG,main="", border=rgb(0,1,0))
 title("", cex.main=2, outer=TRUE, font.lab=2, ylab="Left Hand                                      Right Hand",cex.lab=1.2)
 
 ```
@@ -385,68 +383,76 @@ radar3.angle <- function (data, zone, main, angle, title) {
 Delta propre droit et gauche
 
 ```{r plot radar 1, echo=FALSE, warning=FALSE, fig.height=4.3, fig.width=4.3, fig.align="center",fig.show="hold"}
-layout(matrix(c(1,4,1,2,4,5,2,1,5,3,1,6,3,7,6,1,7,1),nrow=3))
+ima <- readPNG(paste(getwd(), "/Schéma delta.png", sep=""))
+
+layout(matrix(c(1,4,1,2,4,5,2,8,5,3,8,6,3,7,6,1,7,1),nrow=3))
 par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 
 plot.new()
 
-radar3.angle(data, "delta propre", "droit", "aab", "aab delta propre droit")
-radar3.angle(data, "delta propre", "droit", "caa", "caa delta propre droit")
-radar3.angle(data, "delta propre", "droit", "abb", "abb delta propre droit")
-radar3.angle(data, "delta propre", "droit", "bbc", "bbc delta propre droit")
-radar3.angle(data, "delta propre", "droit", "bcc", "bcc delta propre droit")
-radar3.angle(data, "delta propre", "droit", "cca", "cca delta propre droit")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta propre", "droit", i, "")}
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 
 plot.new()
 
-radar3.angle(data, "delta propre", "gauche", "aab", "aab delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "caa", "caa delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "abb", "abb delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "bbc", "bbc delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "bcc", "bcc delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "cca", "cca delta propre gauche")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta propre", "gauche", i, "")}
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 ```
 
 \newpage
 Delta de pouce droit et gauche
 
 ```{r plot radar 2, echo=FALSE, warning=FALSE, fig.height=4.3, fig.width=4.3, fig.align="center",fig.show="hold"}
-layout(matrix(c(1,4,1,2,4,5,2,1,5,3,1,6,3,7,6,1,7,1),nrow=3))
+layout(matrix(c(1,4,1,2,4,5,2,8,5,3,8,6,3,7,6,1,7,1),nrow=3))
 par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 
 plot.new()
 
-radar3.angle(data, "delta de pouce", "droit", "aab", "aab delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "caa", "caa delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "abb", "abb delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "bbc", "bbc delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "bcc", "bcc delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "cca", "cca delta propre droit")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta de pouce", "droit", i, "")}
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 
 plot.new()
 
-radar3.angle(data, "delta de pouce", "gauche", "aab", "aab delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "caa", "caa delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "abb", "abb delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "bbc", "bbc delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "bcc", "bcc delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "cca", "cca delta de pouce gauche")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta de pouce", "gauche", i, "")}
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 ```
 
 \elandscape
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+## Appendix
+
+There are non-printed appendixes which would result in other pdf files. To see them set the chunk option from "eval = F" to "eval = T".
+
+```{r CSR for each print, echo=FALSE, include=FALSE, warning=FALSE, fig.align="center",fig.show="hold", eval = F}
+layout(matrix(c(seq(1,9,2),seq(2,10,2),seq(11,19,2),seq(12,20,2),seq(21,29,2),seq(22,30,2),seq(31,39,2),seq(32,40,2)),nrow=5,ncol=8))
+  par(oma=c(0,0,1.5,0)+0.1,mar=c(2,1.5,1,0)+0.1)
+  
+pdf("CSR Pouce droit.pdf",paper="a4",width=11.2,height=7.8) ; CSR(pouceD,"PouceD",plot=T, summary=T) ; dev.off()
+pdf("CSR Pouce gauche.pdf",paper="a4",width=11.2,height=7.8) ; CSR(pouceG,"PouceG",plot=T, summary=T) ; dev.off()
+pdf("CSR Propre droit.pdf",paper="a4",width=11.2,height=7.8) ; CSR(propreD,"PropreD",plot=T, summary=T) ; dev.off()
+pdf("CSR Propre gauche.pdf",paper="a4",width=11.2,height=7.8) ; CSR(propreG,"PropreG",plot=T, summary=T) ; dev.off()
+pdf("CSR Control droit.pdf",paper="a4",width=11.2,height=7.8) ; CSR(controlD,"ControlD",plot=T, summary=T) ; dev.off()
+pdf("CSR Control gauche.pdf",paper="a4",width=11.2,height=7.8) ; CSR(controlG,"ControlG",plot=T, summary=T) ; dev.off()
 ```
 
-## Including Plots
+```{r test separation zones et distances, echo=FALSE, include=FALSE, warning=FALSE, fig.align="center",fig.show="hold", eval = F}
+delta=c("delta propre", "delta de pouce") ; main = c("droit","gauche")
+zone = c("aab","abb","bbc","bcc","cca","caa") ; dist = c(1,2,3)
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+pdf("test_sep_zones-dist.pdf",paper="a4",width=7.8,height=7.8)
+layout(matrix(c(1,2,3,4),nrow=2))
+for (a in delta){
+  for (b in main){par(new=F)
+    for (c in zone){
+      if (c=="aab" | c=="bbc" | c=="cca"){col=""}
+      else {col="dark"}
+      for (d in dist){
+        if (d==1){plot(subset(data,type==a & d.g==b & V24==c & V25==d)[,17:18], col=paste(col,"red",sep=""), cex=0.5,pch=3,xlim=c(-15,15),ylim=c(-15,15),main=paste(a,b))}
+        else if (d==2){plot(subset(data,type==a & d.g==b & V24==c & V25==d)[,17:18], col=paste(col,"blue",sep=""), cex=0.5,pch=3,xlim=c(-15,15),ylim=c(-15,15))}
+        else {plot(subset(data,type==a & d.g==b & V24==c & V25==d)[,17:18], col=paste(col,"green",sep=""), cex=0.5,pch=3,xlim=c(-15,15),ylim=c(-15,15))}
+        par(new=T)
+      }}}}
+dev.off()
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -11,6 +11,7 @@ library( data.table )
 
 library(fmsb) # radar chart
 library(plotrix) # polar plot
+library(png)
 
 # calculs de base sur la liste des données
 data = mutate( data, xc = x.minut - x.centre )
@@ -188,48 +189,33 @@ radar3.angle <- function (data, zone, main, angle, title) {
               title = "" )
 }
 
-
+ima <- readPNG("/Users/CGrisoni/Documents/workspace/TM Jasmine/04_Traitement des données et matching/Schéma delta.png")
 
 pdf("Radar Chart.pdf",paper="a4",width=7.8,height=7.8)
 #layout(matrix(c(seq(1,6,2),seq(2,6,2)),nrow=3,ncol=2))
-layout(matrix(c(1,4,1,2,4,5,2,1,5,3,1,6,3,7,6,1,7,1),nrow=3))
+layout(matrix(c(1,4,1,2,4,5,2,8,5,3,8,6,3,7,6,1,7,1),nrow=3))
 par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 
 plot.new()
 
-radar3.angle(data, "delta propre", "droit", "aab", "aab delta propre droit")
-radar3.angle(data, "delta propre", "droit", "caa", "caa delta propre droit")
-radar3.angle(data, "delta propre", "droit", "abb", "abb delta propre droit")
-radar3.angle(data, "delta propre", "droit", "bbc", "bbc delta propre droit")
-radar3.angle(data, "delta propre", "droit", "bcc", "bcc delta propre droit")
-radar3.angle(data, "delta propre", "droit", "cca", "cca delta propre droit")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta propre", "droit", i, "")}
+
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 
 plot.new()
 
-radar3.angle(data, "delta propre", "gauche", "aab", "aab delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "caa", "caa delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "abb", "abb delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "bbc", "bbc delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "bcc", "bcc delta propre gauche")
-radar3.angle(data, "delta propre", "gauche", "cca", "cca delta propre gauche")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){
+  radar3.angle(data, "delta propre", "gauche", i, "")}
 
 plot.new()
 
-radar3.angle(data, "delta de pouce", "droit", "aab", "aab delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "caa", "caa delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "abb", "abb delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "bbc", "bbc delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "bcc", "bcc delta propre droit")
-radar3.angle(data, "delta de pouce", "droit", "cca", "cca delta propre droit")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){
+  radar3.angle(data, "delta de pouce", "droit", i, "")}
 
 plot.new()
 
-radar3.angle(data, "delta de pouce", "gauche", "aab", "aab delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "caa", "caa delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "abb", "abb delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "bbc", "bbc delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "bcc", "bcc delta de pouce gauche")
-radar3.angle(data, "delta de pouce", "gauche", "cca", "cca delta de pouce gauche")
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){
+  radar3.angle(data, "delta de pouce", "gauche", i, "")}
 
 dev.off()
 
