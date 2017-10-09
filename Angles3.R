@@ -50,7 +50,7 @@ for (i in 1:nrow(data)) {
   if (data[i,"delta"] == "delta"){
     if      (data[i,"angle.a"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ab"]) {data[i,24] = "aab"
     if(-4 <= data[i,"xc"])                            {data[i,25] = 1} #17 = xc ; 18 = yc
-    else if(-8 <= data[i,"xc"] & data[i,"xc"] < -8)  {data[i,25] = 2}
+    else if(-8 <= data[i,"xc"] & data[i,"xc"] < -4)  {data[i,25] = 2}
     else if(data[i,"xc"] < -8)                       {data[i,25] = 3}}
   
     else if (data[i,"angle.ab"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.b"])  {data[i,24] = "abb"
@@ -79,7 +79,7 @@ for (i in 1:nrow(data)) {
     
     else if (data[i,"angle.ca"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.a"]+360)  {data[i,24] = "caa"
     if(data[i,"xc"] <= 4)                           {data[i,25] = 1}
-    else if(5 < data[i,"xc"] & data[i,"xc"] <= 8)  {data[i,25] = 2}
+    else if(4 < data[i,"xc"] & data[i,"xc"] <= 8)  {data[i,25] = 2}
     else if(8 < data[i,"xc"])                      {data[i,25] = 3}}
     
     else if (data[i,"phi"] == data[i,"angle.a"]) {data[i,24] = "a"}
@@ -92,7 +92,6 @@ for (i in 1:nrow(data)) {
     
     else {print ("Error")}
     }}
-
 
 
 
@@ -139,7 +138,7 @@ radar3.angle <- function (data, zone, main, angle, title) {
     tmp2 = subset(data, type==zone & d.g==main & V24=="caa" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="caa" & V25==3)}
   
-  # print(nrow(tmp1));print(nrow(tmp2));print(nrow(tmp3))
+  print(nrow(tmp1));print(nrow(tmp2));print(nrow(tmp3))
   
   
   radar.tmp1 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp1)=c(seq(90,350,10),seq(0,80,10))
