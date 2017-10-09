@@ -186,15 +186,15 @@ radar3.angle <- function (data, zone, main, angle, title) {
               pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0)) , #custom polygon
               cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8, pty = 32, plty=1, plwd=c(1,1,1,3), #custom the grid
               vlcex=0.8 , centerzero=TRUE, #custom labels
-              title = title )
+              title = "" )
 }
 
 
 
-pdf("Radar Chart.pdf",paper="a4",width=7.8,height=11.2)
+pdf("Radar Chart.pdf",paper="a4",width=7.8,height=7.8)
 #layout(matrix(c(seq(1,6,2),seq(2,6,2)),nrow=3,ncol=2))
 layout(matrix(c(1,4,1,2,4,5,2,1,5,3,1,6,3,7,6,1,7,1),nrow=3))
-par(oma=c(0,0,1.5,0)+0.1,mar=c(2,0,1,0)+0.1)
+par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 
 plot.new()
 
