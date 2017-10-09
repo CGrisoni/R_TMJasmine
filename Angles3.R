@@ -48,14 +48,39 @@ old <- Sys.time() # get start time
 
 for (i in 1:nrow(data)) {
   if (data[i,"delta"] == "delta"){
-    if      (data[i,"angle.a"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ab"]) {data[i,24] = "aab"}
-    else if (data[i,"angle.ab"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.b"])  {data[i,24] = "abb"}
+    if      (data[i,"angle.a"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ab"]) {data[i,24] = "aab"
+    if(-4 <= data[i,"xc"])                            {data[i,25] = 1} #17 = xc ; 18 = yc
+    else if(-8 <= data[i,"xc"] & data[i,"xc"] < -8)  {data[i,25] = 2}
+    else if(data[i,"xc"] < -8)                       {data[i,25] = 3}}
+  
+    else if (data[i,"angle.ab"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.b"])  {data[i,24] = "abb"
+    if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 4/sin(deg2rad(data[i,"angle.b"])))                    {data[i,25] = 1}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 4/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 8/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 8/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"])    {data[i,25] = 3}}
     
-    else if (data[i,"angle.b"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.bc"]) {data[i,24] = "bbc"}
-    else if (data[i,"angle.bc"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.c"])  {data[i,24] = "bcc"}
+    else if (data[i,"angle.b"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.bc"]) {data[i,24] = "bbc"
+    if(data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 4/sin(deg2rad(data[i,"angle.b"])) <= data[i,"yc"])                    {data[i,25] = 1}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) -8/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 4/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
+    else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 8/sin(deg2rad(data[i,"angle.b"]))))    {data[i,25] = 3}}
     
-    else if (data[i,"angle.c"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ca"]) {data[i,24] = "cca"}
-    else if (data[i,"angle.ca"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.a"]+360)  {data[i,24] = "caa"}
+    else if (data[i,"angle.bc"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.c"])  {data[i,24] = "bcc"
+    if(data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 4/sin(deg2rad(data[i,"angle.c"])) <= data[i,"yc"])                    {data[i,25] = 1}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 8/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 4/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
+    else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 8/sin(deg2rad(data[i,"angle.c"]))))    {data[i,25] = 3}}
+    
+    else if (data[i,"angle.c"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ca"]) {data[i,24] = "cca"
+    if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 4/sin(deg2rad(data[i,"angle.c"])))                    {data[i,25] = 1}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 4/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 8/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 8/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"])    {data[i,25] = 3}}
+    
+    else if (data[i,"angle.ca"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.a"]+360)  {data[i,24] = "caa"
+    if(data[i,"xc"] <= 4)                           {data[i,25] = 1}
+    else if(5 < data[i,"xc"] & data[i,"xc"] <= 8)  {data[i,25] = 2}
+    else if(8 < data[i,"xc"])                      {data[i,25] = 3}}
     
     else if (data[i,"phi"] == data[i,"angle.a"]) {data[i,24] = "a"}
     else if (data[i,"phi"] == data[i,"angle.b"]) {data[i,24] = "b"}
@@ -68,54 +93,7 @@ for (i in 1:nrow(data)) {
     else {print ("Error")}
     }}
 
-for (i in 1:nrow(data)) {#print(i)
-  if (data[i,"delta"] == "delta"){
-    if (data[i,24] == "aab"){
-      if(-5 <= data[i,"xc"])                            {data[i,25] = 1} #17 = xc ; 18 = yc
-      else if(-10 <= data[i,"xc"] & data[i,"xc"] < -5)  {data[i,25] = 2}
-      else if(data[i,"xc"] < -10)                       {data[i,25] = 3}}
-    
-    else if (data[i,24] == "abb"){
-      if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 5/sin(deg2rad(data[i,"angle.b"])))                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 5/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
-         data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 10/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 10/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"])    {data[i,25] = 3}}
-    
-    else if (data[i,24] == "bbc"){
-      if(data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 5/sin(deg2rad(data[i,"angle.b"])) <= data[i,"yc"])                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) -10/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
-                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 5/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
-      else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 10/sin(deg2rad(data[i,"angle.b"]))))    {data[i,25] = 3}}
-    
-    else if (data[i,24] == "bcc"){
-      if(data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 5/sin(deg2rad(data[i,"angle.c"])) <= data[i,"yc"])                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 10/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
-                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 5/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
-      else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 10/sin(deg2rad(data[i,"angle.c"]))))    {data[i,25] = 3}}
-    
-    else if (data[i,24] == "cca"){
-      if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 5/sin(deg2rad(data[i,"angle.c"])))                    {data[i,25] = 1}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 5/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
-                        data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 10/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
-      else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 10/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"])    {data[i,25] = 3}}
-    
-    else if (data[i,24] == "caa"){
-      if(data[i,"xc"] <= 5)                           {data[i,25] = 1}
-      else if(5 < data[i,"xc"] & data[i,"xc"] <= 10)  {data[i,25] = 2}
-      else if(10 < data[i,"xc"])                      {data[i,25] = 3}}
-  }}
 
-# a=0;b=0;c=0;ab=0;bc=0;ca=0
-# 
-# for (i in 1:nrow(data)) {
-#   if (data[i,3]== "delta"){
-#     if(data[i,21]=="a"){a=a+1}
-#     else if (data[i,21]=="b"){b=b+1}
-#     else if (data[i,21]=="c"){c=c+1}
-#     else if (data[i,21]=="ab"){ab=ab+1}
-#     else if (data[i,21]=="bc"){bc=bc+1}
-#     else if (data[i,21]=="ca"){ca=ca+1}
-#     }}
 
 
 
@@ -136,39 +114,39 @@ radar3.angle <- function (data, zone, main, angle, title) {
     tmp2 = subset(data, type==zone & d.g==main & V24=="aab" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="aab" & V25==3)}
 
-  if (angle=="abb"){
+  else if (angle=="abb"){
     tmp1 = subset(data, type==zone & d.g==main & V24=="abb" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="abb" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="abb" & V25==3)}
 
-  if (angle=="bbc"){
+  else if (angle=="bbc"){
     tmp1 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==3)}
 
-  if (angle=="bcc"){
+  else if (angle=="bcc"){
     tmp1 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==3)}
 
-  if (angle=="cca"){
+  else if (angle=="cca"){
     tmp1 = subset(data, type==zone & d.g==main & V24=="cca" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="cca" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="cca" & V25==3)}
 
-  if (angle=="caa"){
+  else if (angle=="caa"){
     tmp1 = subset(data, type==zone & d.g==main & V24=="caa" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="caa" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="caa" & V25==3)}
   
-  print(nrow(tmp1));print(nrow(tmp2));print(nrow(tmp3))
+  # print(nrow(tmp1));print(nrow(tmp2));print(nrow(tmp3))
   
   
   radar.tmp1 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp1)=c(seq(90,350,10),seq(0,80,10))
   radar.tmp2 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp2)=c(seq(90,350,10),seq(0,80,10))
   if (nrow(tmp3) != 0) {radar.tmp3 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp3)=c(seq(90,350,10),seq(0,80,10))}
   
-  print("Test 0")
+  #print("Test 0")
   
   if (angle=="aab" | angle=="caa"){ 
     for (i in tmp1[,19]) { radar.tmp1[1,round(i/10-9)%%36+1] = radar.tmp1[1,round(i/10-9)%%36+1]+1 } # 19 = tc
@@ -180,24 +158,24 @@ radar3.angle <- function (data, zone, main, angle, title) {
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
     else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))}}
   
-  if (angle=="abb" | angle == "bbc"){print("Test 1")
+  else if (angle=="abb" | angle == "bbc"){#print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+120)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+120)/10-9)%%36+1]+1 }
     if (nrow(tmp3) != 0) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+120)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+120)/10-9)%%36+1]+1 }}
     
-    print("Test 2")
+    #print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
     else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0))}}
   
-  if (angle=="bcc" | angle=="cca"){print("Test 1")
+  else if (angle=="bcc" | angle=="cca"){#print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+240)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+240)/10-9)%%36+1]+1 }
     if (nrow(tmp3) != 0) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+240)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+240)/10-9)%%36+1]+1 }}
     
-    print("Test 2")
+    #print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
@@ -210,6 +188,7 @@ radar3.angle <- function (data, zone, main, angle, title) {
               vlcex=0.8 , centerzero=TRUE, #custom labels
               title = title )
 }
+
 
 
 pdf("Radar Chart.pdf",paper="a4",width=7.8,height=11.2)
