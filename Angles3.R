@@ -127,33 +127,40 @@ for (i in 1:nrow(data)) {#print(i)
 
 radar3.angle <- function (data, zone, main, angle, title) {
   
-  if (angle=="aab"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V24=="aab" & V25==1) 
+  # for (i in c("aab","abb","bbc","bcc","cca","caa")){
+  #   if (angle==i){ 
+  #     tmp1 = subset(data, type==zone & d.g==main & V24=="aab" & V25==1) 
+  #     tmp2 = subset(data, type==zone & d.g==main & V24=="aab" & V25==2)
+  #     tmp3 = subset(data, type==zone & d.g==main & V24=="aab" & V25==3)}
+  # } ### à mettre tout à la fin
+  
+  if (angle=="aab"){
+    tmp1 = subset(data, type==zone & d.g==main & V24=="aab" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="aab" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="aab" & V25==3)}
-  
-  if (angle=="abb"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V24=="abb" & V25==1) 
+
+  if (angle=="abb"){
+    tmp1 = subset(data, type==zone & d.g==main & V24=="abb" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="abb" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="abb" & V25==3)}
-  
-  if (angle=="bbc"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==1) 
+
+  if (angle=="bbc"){
+    tmp1 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="bbc" & V25==3)}
-  
-  if (angle=="bcc"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==1) 
+
+  if (angle=="bcc"){
+    tmp1 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="bcc" & V25==3)}
-  
-  if (angle=="cca"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V24=="cca" & V25==1) 
+
+  if (angle=="cca"){
+    tmp1 = subset(data, type==zone & d.g==main & V24=="cca" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="cca" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="cca" & V25==3)}
-  
-  if (angle=="caa"){ 
-    tmp1 = subset(data, type==zone & d.g==main & V24=="caa" & V25==1) 
+
+  if (angle=="caa"){
+    tmp1 = subset(data, type==zone & d.g==main & V24=="caa" & V25==1)
     tmp2 = subset(data, type==zone & d.g==main & V24=="caa" & V25==2)
     tmp3 = subset(data, type==zone & d.g==main & V24=="caa" & V25==3)}
   
@@ -169,32 +176,32 @@ radar3.angle <- function (data, zone, main, angle, title) {
   if (angle=="aab" | angle=="caa"){ 
     for (i in tmp1[,19]) { radar.tmp1[1,round(i/10-9)%%36+1] = radar.tmp1[1,round(i/10-9)%%36+1]+1 }
     for (i in tmp2[,19]) { radar.tmp2[1,round(i/10-9)%%36+1] = radar.tmp2[1,round(i/10-9)%%36+1]+1 }
-    for (i in tmp3[,19]) { radar.tmp3[1,round(i/10-9)%%36+1] = radar.tmp3[1,round(i/10-9)%%36+1]+1 }
+    if (nrow(tmp3 != 0)) {for (i in tmp3[,19]) { radar.tmp3[1,round(i/10-9)%%36+1] = radar.tmp3[1,round(i/10-9)%%36+1]+1 }}
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
+    if (nrow(tmp3 != 0)) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100}
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
   
   if (angle=="abb" | angle == "bbc"){print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1]+1 }
+    if (nrow(tmp3 != 0)) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1]+1 }}
     
     print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
+    if (nrow(tmp3 != 0)) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100}
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
   
   if (angle=="bcc" | angle=="cca"){print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1]+1 }
     for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1]+1 }
+    if (nrow(tmp3 != 0)) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1]+1 }}
     
     print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
+    if (nrow(tmp3 != 0)) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100}
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
   
   radarchart( radar.tmp  , axistype=1 , 
@@ -204,6 +211,7 @@ radar3.angle <- function (data, zone, main, angle, title) {
               title = title )
 }
 
+old <- Sys.time() # get start time
 
 pdf("Radar Chart.pdf",paper="a4",width=7.8,height=11.2)
 #layout(matrix(c(seq(1,6,2),seq(2,6,2)),nrow=3,ncol=2))
@@ -241,3 +249,6 @@ radar3.angle(data, "delta de pouce", "gauche", "bcc", "bcc delta de pouce gauche
 radar3.angle(data, "delta de pouce", "gauche", "cca", "cca delta de pouce gauche")
 
 dev.off()
+
+new <- Sys.time() - old # calculate difference
+print(new) # print in nice format
