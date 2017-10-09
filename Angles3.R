@@ -68,9 +68,6 @@ for (i in 1:nrow(data)) {
     else {print ("Error")}
     }}
 
-new <- Sys.time() - old # calculate difference
-print(new) # print in nice format
-
 for (i in 1:nrow(data)) {#print(i)
   if (data[i,"delta"] == "delta"){
     if (data[i,24] == "aab"){
@@ -169,40 +166,43 @@ radar3.angle <- function (data, zone, main, angle, title) {
   
   radar.tmp1 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp1)=c(seq(90,350,10),seq(0,80,10))
   radar.tmp2 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp2)=c(seq(90,350,10),seq(0,80,10))
-  radar.tmp3 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp3)=c(seq(90,350,10),seq(0,80,10))
+  if (nrow(tmp3) != 0) {radar.tmp3 = as.data.frame(matrix(0,ncol=36)) ;colnames(radar.tmp3)=c(seq(90,350,10),seq(0,80,10))}
   
   print("Test 0")
   
   if (angle=="aab" | angle=="caa"){ 
-    for (i in tmp1[,19]) { radar.tmp1[1,round(i/10-9)%%36+1] = radar.tmp1[1,round(i/10-9)%%36+1]+1 }
+    for (i in tmp1[,19]) { radar.tmp1[1,round(i/10-9)%%36+1] = radar.tmp1[1,round(i/10-9)%%36+1]+1 } # 19 = tc
     for (i in tmp2[,19]) { radar.tmp2[1,round(i/10-9)%%36+1] = radar.tmp2[1,round(i/10-9)%%36+1]+1 }
-    if (nrow(tmp3 != 0)) {for (i in tmp3[,19]) { radar.tmp3[1,round(i/10-9)%%36+1] = radar.tmp3[1,round(i/10-9)%%36+1]+1 }}
+    if (nrow(tmp3) != 0) {for (i in tmp3[,19]) { radar.tmp3[1,round(i/10-9)%%36+1] = radar.tmp3[1,round(i/10-9)%%36+1]+1 }}
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    if (nrow(tmp3 != 0)) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100}
+    if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))}}
   
   if (angle=="abb" | angle == "bbc"){print("Test 1")
-    for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+210)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+210)/10-9)%%36+1]+1 }
-    if (nrow(tmp3 != 0)) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+210)/10-9)%%36+1]+1 }}
+    for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1]+1 }
+    for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+120)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,12]+120)/10-9)%%36+1]+1 }
+    if (nrow(tmp3) != 0) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+120)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,12]+120)/10-9)%%36+1]+1 }}
     
     print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    if (nrow(tmp3 != 0)) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100}
+    if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0))}}
   
   if (angle=="bcc" | angle=="cca"){print("Test 1")
-    for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+330)/10-9)%%36+1]+1 }
-    for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+330)/10-9)%%36+1]+1 }
-    if (nrow(tmp3 != 0)) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+330)/10-9)%%36+1]+1 }}
+    for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1]+1 }
+    for (i in 1:nrow(tmp2)) { radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+240)/10-9)%%36+1] = radar.tmp2[1,round((tmp2[i,19]-tmp2[i,13]+240)/10-9)%%36+1]+1 }
+    if (nrow(tmp3) != 0) {for (i in 1:nrow(tmp3)) { radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+240)/10-9)%%36+1] = radar.tmp3[1,round((tmp3[i,19]-tmp3[i,13]+240)/10-9)%%36+1]+1 }}
     
     print("Test 2")
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
-    if (nrow(tmp3 != 0)) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100}
+    if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
     radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0))}}
   
   radarchart( radar.tmp  , axistype=1 , 
               pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0)) , #custom polygon
@@ -211,7 +211,6 @@ radar3.angle <- function (data, zone, main, angle, title) {
               title = title )
 }
 
-old <- Sys.time() # get start time
 
 pdf("Radar Chart.pdf",paper="a4",width=7.8,height=11.2)
 #layout(matrix(c(seq(1,6,2),seq(2,6,2)),nrow=3,ncol=2))
@@ -227,6 +226,8 @@ radar3.angle(data, "delta propre", "droit", "bbc", "bbc delta propre droit")
 radar3.angle(data, "delta propre", "droit", "bcc", "bcc delta propre droit")
 radar3.angle(data, "delta propre", "droit", "cca", "cca delta propre droit")
 
+plot.new()
+
 radar3.angle(data, "delta propre", "gauche", "aab", "aab delta propre gauche")
 radar3.angle(data, "delta propre", "gauche", "caa", "caa delta propre gauche")
 radar3.angle(data, "delta propre", "gauche", "abb", "abb delta propre gauche")
@@ -234,12 +235,16 @@ radar3.angle(data, "delta propre", "gauche", "bbc", "bbc delta propre gauche")
 radar3.angle(data, "delta propre", "gauche", "bcc", "bcc delta propre gauche")
 radar3.angle(data, "delta propre", "gauche", "cca", "cca delta propre gauche")
 
+plot.new()
+
 radar3.angle(data, "delta de pouce", "droit", "aab", "aab delta propre droit")
 radar3.angle(data, "delta de pouce", "droit", "caa", "caa delta propre droit")
 radar3.angle(data, "delta de pouce", "droit", "abb", "abb delta propre droit")
 radar3.angle(data, "delta de pouce", "droit", "bbc", "bbc delta propre droit")
 radar3.angle(data, "delta de pouce", "droit", "bcc", "bcc delta propre droit")
 radar3.angle(data, "delta de pouce", "droit", "cca", "cca delta propre droit")
+
+plot.new()
 
 radar3.angle(data, "delta de pouce", "gauche", "aab", "aab delta de pouce gauche")
 radar3.angle(data, "delta de pouce", "gauche", "caa", "caa delta de pouce gauche")
