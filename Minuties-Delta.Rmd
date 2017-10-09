@@ -31,6 +31,7 @@ library(dplyr) # mutate
 library(mosaic) # rad2deg
 library(spatstat) # ppp, Kest
 library(gridExtra) # tableGrob
+library(fmsb) # radar chart
 
 
 data = mutate( data, xc = x.minut - x.centre )
