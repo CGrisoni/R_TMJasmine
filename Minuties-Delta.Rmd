@@ -78,10 +78,10 @@ pcontrolD = ppp(controlD[,17],controlD[,18], disc(8)) ; pcontrolG = ppp(controlG
 
 layout(matrix(c(1,2,3,4,5,6),nrow=2,ncol=3))
 par(oma = c(0,5,0,0) + 0.1,mar = c(0,0,0.9,0) + 0.1)
-plot(ppouceD,main="Thumb delta",cex.main=1, ylab="RIGHT", border=rgb(0,1,0))
-plot(ppouceG,main="", border=rgb(0,1,0)) 
-plot(ppropreD,main="Clean delta", border=rgb(0,1,0));plot(ppropreG,main="", border=rgb(0,1,0))
-plot(pcontrolD,main="Control zone", border=rgb(0,1,0));plot(pcontrolG,main="", border=rgb(0,1,0))
+plot(ppouceD, cex=0.8, main="Thumb delta",cex.main=1, ylab="RIGHT", border=rgb(1,0,0))
+plot(ppouceG, cex=0.8, main="", border=rgb(1,0,0)) 
+plot(ppropreD, cex=0.8, main="Clean delta", border=rgb(1,0,0));plot(ppropreG, cex=0.8, main="", border=rgb(1,0,0))
+plot(pcontrolD, cex=0.8, main="Control zone", border=rgb(1,0,0));plot(pcontrolG, cex=0.8, main="", border=rgb(1,0,0))
 title("", cex.main=2, outer=TRUE, font.lab=2, ylab="Left Hand                                      Right Hand",cex.lab=1.2)
 
 ```
@@ -94,7 +94,7 @@ The green circle is the window in which the analysis will be made. The diameter 
 
 A CSR test (Complete Spatial Randomness) was done on each print individually. This was made using a second order K test accordingly to what was done in Chen and Moon 2006. 
 
-```{r plot CSR, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=2.97, fig.align="center", fig.show="hold"}
+```{r plot CSR, echo=FALSE, warning=FALSE, fig.align="center", fig.show="hold"}
 CSR <- function(data,name, plot = TRUE, summary = TRUE){
   r<- seq(0,8, by=0.01) ; CSR=0 ; cluster = 0 ; dispersed = 0 ; cluster2 = 0 ; dispersed2 = 0 ; test = data.frame()
   
@@ -171,71 +171,72 @@ datapropreg = CSR(propreG,"PropreG",plot=FALSE, summary=FALSE) # 24
 datacontrold = CSR(controlD,"ControlD",plot=FALSE, summary=FALSE) # 69
 datacontrolg = CSR(controlG,"ControlG",plot=FALSE, summary=FALSE) # 74
 
-datafin=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+datafin=as.data.frame(matrix(0, ncol = 3, nrow = 3))
 
-datafin[1,2] = datapouced[1] ; datafin[1,3] = datapouceg[1]
-datafin[2,2] = datapropred[1] ; datafin[2,3] = datapropreg[1]
-datafin[3,2] = datacontrold[1] ; datafin[3,3] = datacontrolg[1]
+datafin[1,1] = datapouced[1] ; datafin[1,2] = datapouceg[1]
+datafin[2,1] = datapropred[1] ; datafin[2,2] = datapropreg[1]
+datafin[3,1] = datacontrold[1] ; datafin[3,2] = datacontrolg[1]
 
-datafin[1,4] = paste((datafin[1,2]+datafin[1,3]), " (", ((datafin[1,2]+datafin[1,3])/2)," %)",sep="")
-datafin[2,4] = paste((datafin[2,2]+datafin[2,3]), " (", ((datafin[2,2]+datafin[2,3])/2)," %)",sep="")
-datafin[3,4] = paste((datafin[3,2]+datafin[3,3]), " (", ((datafin[3,2]+datafin[3,3])/2)," %)",sep="")
-colnames(datafin) = c("", "Droit", "Gauche", "total (%)") ; datafin[1,1] = "Pouce" ; datafin[2,1] = "Propre" ; datafin[3,1] = "Control"
+datafin[1,3] = paste((datafin[1,1]+datafin[1,2]), "  (", ((datafin[1,1]+datafin[1,2])/2)," %)",sep="")
+datafin[2,3] = paste((datafin[2,1]+datafin[2,2]), "  (", ((datafin[2,1]+datafin[2,2])/2)," %)",sep="")
+datafin[3,3] = paste((datafin[3,1]+datafin[3,2]), " (", ((datafin[3,1]+datafin[3,2])/2)," %)",sep="")
+colnames(datafin) = c("Right", "Left", "total (%)") ; rownames(datafin) = c("Thumb" , "Clean delta" , "Control")
 
-datafin2=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+knitr::kable(datafin,format = "markdown")
 
-datafin2[1,2] = (100 - (datapouced[2] + datapouced[3]))     ; datafin2[1,3] = (100 - (datapouceg[2] + datapouceg[3]))
-datafin2[2,2] = (100 - (datapropred[2] + datapropred[3]))   ; datafin2[2,3] = (100 - (datapropreg[2] + datapropreg[3]))
-datafin2[3,2] = (100 - (datacontrold[2] + datacontrold[3])) ; datafin2[3,3] = (100 - (datacontrolg[2] + datacontrolg[3]))
+datafin2=as.data.frame(matrix(0, ncol = 3, nrow = 3))
 
-datafin2[1,4] = paste((datafin2[1,2]+datafin2[1,3]), " (", ((datafin2[1,2]+datafin2[1,3])/2)," %)",sep="")
-datafin2[2,4] = paste((datafin2[2,2]+datafin2[2,3]), " (", ((datafin2[2,2]+datafin2[2,3])/2)," %)",sep="")
-datafin2[3,4] = paste((datafin2[3,2]+datafin2[3,3]), " (", ((datafin2[3,2]+datafin2[3,3])/2)," %)",sep="")
-colnames(datafin2) = c("", "Droit", "Gauche", "total (%)") ; datafin2[1,1] = "Pouce" ; datafin2[2,1] = "Propre" ; datafin2[3,1] = "Control"
+datafin2[1,1] = (100 - (datapouced[2] + datapouced[3]))     ; datafin2[1,2] = (100 - (datapouceg[2] + datapouceg[3]))
+datafin2[2,1] = (100 - (datapropred[2] + datapropred[3]))   ; datafin2[2,2] = (100 - (datapropreg[2] + datapropreg[3]))
+datafin2[3,1] = (100 - (datacontrold[2] + datacontrold[3])) ; datafin2[3,2] = (100 - (datacontrolg[2] + datacontrolg[3]))
 
-plot(tableGrob(datafin,rows=NULL))
-plot(tableGrob(datafin2,rows=NULL))
+datafin2[1,3] = paste((datafin2[1,1]+datafin2[1,2]), "   (", ((datafin2[1,1]+datafin2[1,2])/2)," %)",sep="")
+datafin2[2,3] = paste((datafin2[2,1]+datafin2[2,2]), " (", ((datafin2[2,1]+datafin2[2,2])/2)," %)",sep="")
+datafin2[3,3] = paste((datafin2[3,1]+datafin2[3,2]), " (", ((datafin2[3,1]+datafin2[3,2])/2)," %)",sep="")
+colnames(datafin2) = c("Right", "Left", "total (%)") ; rownames(datafin2) = c("Thumb" , "Clean delta" , "Control")
+
+knitr::kable(datafin2,format = "markdown")
 ```
 
 djiodjvid
 
 ```{r plot Disp/Clust, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=4.29, fig.align="center"}
 
-datafin3=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+datafin3=as.data.frame(matrix(0, ncol = 3, nrow = 3))
 
-datafin3[1,2] = paste(datapouced[4],"/",datapouced[5]) ; datafin3[1,3] = paste(datapouceg[4],"/",datapouceg[5])
-datafin3[2,2] = paste(datapropred[4],"/",datapropred[5]) ; datafin3[2,3] = paste(datapropreg[4],"/",datapropreg[5])
-datafin3[3,2] = paste(datacontrold[4],"/",datacontrold[5]) ; datafin3[3,3] = paste(datacontrolg[4],"/",datacontrolg[5])
+datafin3[1,1] = paste(datapouced[4],"/",datapouced[5]) ; datafin3[1,2] = paste(datapouceg[4],"/",datapouceg[5])
+datafin3[2,1] = paste(datapropred[4],"/",datapropred[5]) ; datafin3[2,2] = paste(datapropreg[4],"/",datapropreg[5])
+datafin3[3,1] = paste(datacontrold[4],"/",datacontrold[5]) ; datafin3[3,2] = paste(datacontrolg[4],"/",datacontrolg[5])
 
-datafin3[1,4] = paste(((datapouced[4]+datapouceg[4])/2), "/", paste(((datapouced[5]+datapouceg[5])/2), 
+datafin3[1,3] = paste(((datapouced[4]+datapouceg[4])), "  /", paste(((datapouced[5]+datapouceg[5])), 
                                                                       " (", ((datapouced[4]+datapouceg[4])/2), " % /", ((datapouced[5]+datapouceg[5])/2)," %)",sep=""))
-datafin3[2,4] = paste(((datapropred[4]+datapropreg[4])/2), "/", paste(((datapropred[5]+datapropreg[5])/2),
-                                                                        " (", ((datapropred[4]+datapropreg[4])/2), " % /", ((datapropred[5]+datapropreg[5])/2)," %)",sep=""))
-datafin3[3,4] = paste(((datacontrold[4]+datacontrolg[4])/2), "/", paste(((datacontrold[5]+datacontrolg[5])/2),
-                                                                        " (", ((datacontrold[4]+datacontrolg[4])/2), " % /", ((datacontrold[5]+datacontrolg[5])/2)," %)",sep=""))
-colnames(datafin3) = c("", "Droit", "Gauche", "total (%)") ; datafin3[1,1] = "Pouce" ; datafin3[2,1] = "Propre" ; datafin3[3,1] = "Control"
+datafin3[2,3] = paste(((datapropred[4]+datapropreg[4])), "/", paste(((datapropred[5]+datapropreg[5])),
+                                                                        "  (", ((datapropred[4]+datapropreg[4])/2), " % /", ((datapropred[5]+datapropreg[5])/2)," %)",sep=""))
+datafin3[3,3] = paste(((datacontrold[4]+datacontrolg[4])), "  /", paste(((datacontrold[5]+datacontrolg[5])),
+                                                                        "  (", ((datacontrold[4]+datacontrolg[4])/2), " % /", ((datacontrold[5]+datacontrolg[5])/2)," %)",sep=""))
+colnames(datafin3) = c("Right", "Left", "total (%)") ; rownames(datafin3) = c("Thumb" , "Clean delta" , "Control")
 
-plot(tableGrob(datafin3,rows=NULL))
+knitr::kable(datafin3,format = "markdown")
 ```
 
 dvsduvhiuvs
 
 ```{r plot Disp/Clust 2, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=3.98, fig.align="center"}
-datafin4=as.data.frame(matrix(0, ncol = 4, nrow = 3))
+datafin4=as.data.frame(matrix(0, ncol = 3, nrow = 3))
 
-datafin4[1,2] = paste(datapouced[2],"/",datapouced[3]) ; datafin4[1,3] = paste(datapouceg[2],"/",datapouceg[3])
-datafin4[2,2] = paste(datapropred[2],"/",datapropred[3]) ; datafin4[2,3] = paste(datapropreg[2],"/",datapropreg[3])
-datafin4[3,2] = paste(datacontrold[2],"/",datacontrold[3]) ; datafin4[3,3] = paste(datacontrolg[2],"/",datacontrolg[3])
+datafin4[1,1] = paste(datapouced[2],"/",datapouced[3]) ; datafin4[1,2] = paste(datapouceg[2],"/",datapouceg[3])
+datafin4[2,1] = paste(datapropred[2],"/",datapropred[3]) ; datafin4[2,2] = paste(datapropreg[2],"/",datapropreg[3])
+datafin4[3,1] = paste(datacontrold[2],"/",datacontrold[3]) ; datafin4[3,2] = paste(datacontrolg[2],"/",datacontrolg[3])
 
-datafin4[1,4] = paste(((datapouced[2]+datapouceg[2])/2), "/", paste(((datapouced[3]+datapouceg[3])/2), 
+datafin4[1,3] = paste(((datapouced[2]+datapouceg[2])), "/", paste(((datapouced[3]+datapouceg[3])), 
                     " (", ((datapouced[2]+datapouceg[2])/2), " % /", ((datapouced[3]+datapouceg[3])/2)," %)",sep=""))
-datafin4[2,4] = paste(((datapropred[2]+datapropreg[2])/2), "/", paste(((datapropred[3]+datapropreg[3])/2),
-                    " (", ((datapropred[2]+datapropreg[2])/2), " % /", ((datapropred[3]+datapropreg[3])/2)," %)",sep=""))
-datafin4[3,4] = paste(((datacontrold[2]+datacontrolg[2])/2), "/", paste(((datacontrold[5]+datacontrolg[5])/2),
-                    " (", ((datacontrold[2]+datacontrolg[2])/2), " % /", ((datacontrold[3]+datacontrolg[3])/2)," %)",sep=""))
-colnames(datafin4) = c("", "Droit", "Gauche", "total (%)") ; datafin4[1,1] = "Pouce" ; datafin4[2,1] = "Propre" ; datafin4[3,1] = "Control"
+datafin4[2,3] = paste(((datapropred[2]+datapropreg[2])), "/", paste(((datapropred[3]+datapropreg[3])),
+                    "   (", ((datapropred[2]+datapropreg[2])/2), " % /", ((datapropred[3]+datapropreg[3])/2)," %)",sep=""))
+datafin4[3,3] = paste(((datacontrold[2]+datacontrolg[2])), "/", paste(((datacontrold[5]+datacontrolg[5])),
+                    "   (", ((datacontrold[2]+datacontrolg[2])/2), " % /", ((datacontrold[3]+datacontrolg[3])/2)," %)",sep=""))
+colnames(datafin4) = c("Right", "Left", "total (%)") ; rownames(datafin4) = c("Thumb" , "Clean delta" , "Control")
 
-plot(tableGrob(datafin4,rows=NULL))
+knitr::kable(datafin4,format = "markdown")
 ```
 
 \blandscape
@@ -345,8 +346,8 @@ radar3.angle <- function (data, zone, main, angle, title) {
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
-    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))}}
+    radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, rep(0,36), c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))}}
   
   else if (angle=="abb" | angle == "bbc"){#print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1]+1 }
@@ -357,8 +358,8 @@ radar3.angle <- function (data, zone, main, angle, title) {
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
-    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0))}}
+    radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2 , rep(0,36), c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0))}}
   
   else if (angle=="bcc" | angle=="cca"){#print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1]+1 }
@@ -369,12 +370,14 @@ radar3.angle <- function (data, zone, main, angle, title) {
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
-    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0))}}
+    radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, radar.tmp3, c(rep(0,6),30,rep(0,17),30,rep(0,11))) }
+    else {radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, rep(0,36), c(rep(0,6),30,rep(0,17),30,rep(0,11)))}}
+  
+  colnames(radar.tmp)=c(90,"","",120,"","",150,"","",180,"","",210,"","",240,"","",270,"","",300,"","",330,"","",0,"","",30,"","",60,"","")
   
   radarchart( radar.tmp  , axistype=1 , 
               pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0)) , #custom polygon
-              cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8, pty = 32, plty=1, plwd=c(1,1,1,3), #custom the grid
+              cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8,calcex = 0.8, pty = 32, plty=1, plwd=c(1,1,1,3), #custom the grid
               vlcex=0.8 , centerzero=TRUE, #custom labels
               title = "" )
 }
@@ -383,7 +386,7 @@ radar3.angle <- function (data, zone, main, angle, title) {
 Delta propre droit et gauche
 
 ```{r plot radar 1, echo=FALSE, warning=FALSE, fig.height=4.3, fig.width=4.3, fig.align="center",fig.show="hold"}
-ima <- readPNG(paste(getwd(), "/Schéma delta.png", sep=""))
+img <- readPNG(paste(getwd(), "/delta-sep.png", sep=""))
 
 layout(matrix(c(1,4,1,2,4,5,2,8,5,3,8,6,3,7,6,1,7,1),nrow=3))
 par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
@@ -391,12 +394,12 @@ par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 plot.new()
 
 for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta propre", "droit", i, "")}
-plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 
 plot.new()
 
 for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta propre", "gauche", i, "")}
-plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 ```
 
 \newpage
@@ -409,12 +412,12 @@ par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 plot.new()
 
 for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta de pouce", "droit", i, "")}
-plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 
 plot.new()
 
 for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta de pouce", "gauche", i, "")}
-plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 ```
 
 \elandscape

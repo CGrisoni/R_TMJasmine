@@ -155,8 +155,8 @@ radar3.angle <- function (data, zone, main, angle, title) {
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
-    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))}}
+    radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, radar.tmp3, c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))}}
   
   else if (angle=="abb" | angle == "bbc"){#print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,12]+120)/10-9)%%36+1]+1 }
@@ -167,8 +167,8 @@ radar3.angle <- function (data, zone, main, angle, title) {
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
-    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2 , c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0))}}
+    radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2 , radar.tmp3, c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2 , c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0))}}
   
   else if (angle=="bcc" | angle=="cca"){#print("Test 1")
     for (i in 1:nrow(tmp1)) { radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1] = radar.tmp1[1,round((tmp1[i,19]-tmp1[i,13]+240)/10-9)%%36+1]+1 }
@@ -179,17 +179,19 @@ radar3.angle <- function (data, zone, main, angle, title) {
     
     radar.tmp1 = radar.tmp1 / sum(radar.tmp1)*100 ; radar.tmp2 = radar.tmp2 / sum(radar.tmp2)*100 
     if (nrow(tmp3) != 0) {radar.tmp3 = radar.tmp3 / sum(radar.tmp3)*100
-    radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, radar.tmp3, c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
-    else {radar.tmp=rbind(rep(30,15) ,rep(0,15) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0))}}
+    radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, radar.tmp3, c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0)) }
+    else {radar.tmp=rbind(rep(30,36) ,rep(0,36) , radar.tmp1, radar.tmp2, c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), c(0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0,0,0,0,0,0,0,0))}}
+  
+  colnames(radar.tmp)=c(90,"","",120,"","",150,"","",180,"","",210,"","",240,"","",270,"","",300,"","",330,"","",0,"","",30,"","",60,"","")
   
   radarchart( radar.tmp  , axistype=1 , 
               pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0)) , #custom polygon
-              cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8, pty = 32, plty=1, plwd=c(1,1,1,3), #custom the grid
+              cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8,calcex = 0.8, pty = 32, plty=1, plwd=c(1,1,1,3), #custom the grid
               vlcex=0.8 , centerzero=TRUE, #custom labels
               title = "" )
 }
 
-ima <- readPNG("/Users/CGrisoni/Documents/workspace/TM Jasmine/04_Traitement des données et matching/Schéma delta.png")
+ima <- readPNG("/Users/CGrisoni/Documents/workspace/TM Jasmine/04_Traitement des données et matching/delta-sep.png")
 
 pdf("Radar Chart.pdf",paper="a4",width=7.8,height=7.8)
 #layout(matrix(c(seq(1,6,2),seq(2,6,2)),nrow=3,ncol=2))
@@ -206,17 +208,17 @@ plot.new()
 
 for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){
   radar3.angle(data, "delta propre", "gauche", i, "")}
-
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 plot.new()
 
 for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){
   radar3.angle(data, "delta de pouce", "droit", i, "")}
-
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 plot.new()
 
 for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){
   radar3.angle(data, "delta de pouce", "gauche", i, "")}
-
+plot.new() ; lim <- par() ; rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 dev.off()
 
 new <- Sys.time() - old # calculate difference
