@@ -380,6 +380,8 @@ radar3.angle <- function (data, zone, main, angle, title) {
               cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8,calcex = 0.8, pty = 32, plty=1, plwd=c(1,1,1,3), #custom the grid
               vlcex=0.8 , centerzero=TRUE, #custom labels
               title = "" )
+  
+  return(round(radar.tmp,1))
 }
 ```
 
@@ -392,13 +394,13 @@ layout(matrix(c(1,4,1,2,4,5,2,8,5,3,8,6,3,7,6,1,7,1),nrow=3))
 par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 
 plot.new()
-
-for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta propre", "droit", i, "")}
+dprod.angle=data.frame()
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){dprod.angle = rbind(dprod.angle, radar3.angle(data, "delta propre", "droit", i, ""))}
 plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 
 plot.new()
-
-for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta propre", "gauche", i, "")}
+dprog.angle=data.frame()
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){dprog.angle = rbind(dprog.angle, radar3.angle(data, "delta propre", "gauche", i, ""))}
 plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 ```
 
@@ -410,19 +412,28 @@ layout(matrix(c(1,4,1,2,4,5,2,8,5,3,8,6,3,7,6,1,7,1),nrow=3))
 par(oma=c(0,0,0,0)+0.1,mar=c(0,0,0,0)+0.1)
 
 plot.new()
-
-for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta de pouce", "droit", i, "")}
+dpoud.angle=data.frame()
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){dpoud.angle = rbind(dpoud.angle, radar3.angle(data, "delta de pouce", "droit", i, ""))}
 plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 
 plot.new()
-
-for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){radar3.angle(data, "delta de pouce", "gauche", i, "")}
+dpoug.angle=data.frame()
+for (i in c("aab", "caa", "abb", "bbc", "bcc", "cca")){dpoug.angle = rbind(dpoug.angle, radar3.angle(data, "delta de pouce", "gauche", i, ""))}
 plot.new() ; lim <- par() ; rasterImage(img, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
 ```
 
+
+
+\newpage
+
+```{r plot radar final, echo=FALSE, warning=FALSE, fig.height=4.3, fig.width=4.3, fig.align="center",fig.show="hold"}
+knitr::kable(dprod.angle,format = "markdown")
+knitr::kable(dprog.angle,format = "markdown")
+knitr::kable(dpoud.angle,format = "markdown")
+knitr::kable(dpoug.angle,format = "markdown")
+```
 \elandscape
-
-
+\newpage
 ## Appendix
 
 There are non-printed appendixes which would result in other pdf files. To see them set the chunk option from "eval = F" to "eval = T".
