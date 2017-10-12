@@ -22,6 +22,8 @@ For each image the minutiaes were annotated with their position and the orientat
 
 
 ```{r load Data, echo=FALSE, include=FALSE, warning=FALSE}
+old <- Sys.time() # get start time
+
 # Préparation des données avec séparations entre deltas propre, de pouce et zone de controle----
 
 data = read.csv( paste(getwd(), "/data_all.csv",sep="" )) ## 48434 obs, 16 var
@@ -51,11 +53,11 @@ data = mutate( data, angle.bc = (angle.b + angle.c)/2)
 data = mutate( data, angle.ca = (angle.c + (360 - angle.c)/2))
 
 for (i in 1:nrow(data)) {
-  if (data[i,"angledif.bc"] < 0) {
-    data[i,"angledif.bc"] = data[i,"angledif.bc"] + 360 
+  if (data$angledif.bc < 0) {
+    data$angledif.bc = data$angledif.bc + 360 
   } 
-  if (data[i,"theta"] < 0){
-    data[i,"theta"] = data[i,"theta"] + 360
+  if (data$theta < 0){
+    data$theta = data$theta + 360
   }
 }
 
@@ -72,9 +74,9 @@ controlG = subset(data, type=="zone de controle" & d.g=="gauche")
 ```{r plot data full, echo=FALSE, warning=FALSE}
 # Préparation des données avec séparations entre deltas propre, de pouce et zone de controle----
 
-ppouceD = ppp(pouceD[,17],pouceD[,18], disc(8)) ; ppouceG = ppp(pouceG[,17],pouceG[,18], disc(8))
-ppropreD = ppp(propreD[,17],propreD[,18], disc(8)) ; ppropreG = ppp(propreG[,17],propreG[,18], disc(8))
-pcontrolD = ppp(controlD[,17],controlD[,18], disc(8)) ; pcontrolG = ppp(controlG[,17],controlG[,18], disc(8))
+ppouceD = ppp(pouceD$xc,pouceD$yc, disc(8)) ; ppouceG = ppp(pouceG$xc,pouceG$yc, disc(8))
+ppropreD = ppp(propreD$xc,propreD$yc, disc(8)) ; ppropreG = ppp(propreG$xc,propreG$yc, disc(8))
+pcontrolD = ppp(controlD$xc,controlD$yc, disc(8)) ; pcontrolG = ppp(controlG$xc,controlG$yc, disc(8))
 
 layout(matrix(c(1,2,3,4,5,6),nrow=2,ncol=3))
 par(oma = c(0,5,0,0) + 0.1,mar = c(0,0,0.9,0) + 0.1)
@@ -94,11 +96,13 @@ The green circle is the window in which the analysis will be made. The diameter 
 
 A CSR test (Complete Spatial Randomness) was done on each print individually. This was made using a second order K test accordingly to what was done in Chen and Moon 2006. 
 
-```{r plot CSR, echo=FALSE, warning=FALSE, fig.align="center"}
+```{r plot CSR function, echo=FALSE, warning=FALSE, fig.align="center"}
 CSR <- function(data,name, plot = TRUE, summary = TRUE){
-  r<- seq(0,8, by=0.01) ; CSR=0 ; cluster = 0 ; dispersed = 0 ; cluster2 = 0 ; dispersed2 = 0 ; test = data.frame()
+  r<- seq(0,8, by=0.01) ; CSR=0 ; clust = 0 ; disp = 0 ; clust2 = 0 ; disp2 = 0 ; test = data.frame()
+  
   layout(matrix(c(seq(1,9,2),seq(2,10,2),seq(11,19,2),seq(12,20,2),seq(21,29,2),seq(22,30,2),seq(31,39,2),seq(32,40,2)),nrow=5,ncol=8))
-    par(oma=c(0,0,1.5,0)+0.1,mar=c(2,1.5,1,0)+0.1)
+  par(oma=c(0,0,1.5,0)+0.1,mar=c(2,1.5,1,0)+0.1)
+  
   for (i in unique(data[,1])){
     datau = data.frame()
     for (j in 1:nrow(data)){
@@ -120,11 +124,11 @@ CSR <- function(data,name, plot = TRUE, summary = TRUE){
     }
     
     test=rbind(test,c(i,round(d/length(k$r)*100,1),round(csr/length(k$r)*100,1),round(c/length(k$r)*100,1)))
-    if (c>d){cluster=cluster + 1}
-    else if (c<d){dispersed=dispersed+1}
+    if (c>d){clust=clust + 1}
+    else if (c<d){disp=disp+1}
     
-    if (c2>d2){cluster2=cluster2 + 1}
-    else if (c2<d2){dispersed2=dispersed2+1}
+    if (c2>d2){clust2=clust2 + 1}
+    else if (c2<d2){disp2=disp2+1}
   
   
   if (plot) {
@@ -156,21 +160,32 @@ CSR <- function(data,name, plot = TRUE, summary = TRUE){
     # mtext(name, outer=TRUE,  cex=1, line=-0)
   }
   
-  return (c(CSR,dispersed2,cluster2,dispersed,cluster))
+  return (c(CSR,disp2,clust2,disp,clust))
   
   # mtext(name, outer=TRUE,  cex=1, line=-0)
-  # mtext(paste(CSR," total CSR distributions, ",cluster," clustering and ",dispersed," dispersed",sep=""),outer = TRUE, cex=1,line=-52)
-  # mtext(paste("Over 2.5 mm, ",cluster2," clustering and ",dispersed2," dispersed",sep=""),outer = TRUE, cex=1,line=-54)
+  # mtext(paste(CSR," total CSR distributions, ",clust," clustering and ",disp," dispersed",sep=""),outer = TRUE, cex=1,line=-52)
+  # mtext(paste("Over 2.5 mm, ",clust2," clustering and ",disp2," dispersed",sep=""),outer = TRUE, cex=1,line=-54)
   
 }
+```
 
-datapouced = CSR(pouceD,"PouceD",plot=FALSE, summary=FALSE) # 17
-datapouceg = CSR(pouceG,"PouceG",plot=FALSE, summary=FALSE) # 7
-datapropred = CSR(propreD,"PropreD",plot=FALSE, summary=FALSE) # 29
-datapropreg = CSR(propreG,"PropreG",plot=FALSE, summary=FALSE) # 24
-datacontrold = CSR(controlD,"ControlD",plot=FALSE, summary=FALSE) # 69
-datacontrolg = CSR(controlG,"ControlG",plot=FALSE, summary=FALSE) # 74
+```{r plot CSR exe, echo=FALSE, warning=FALSE, fig.align="center"}
+old1 <- Sys.time() # get start time
 
+datapouced = CSR(pouceD,"PouceD",plot=F, summary=F) # 17
+datapouceg = CSR(pouceG,"PouceG",plot=F, summary=F) # 7
+datapropred = CSR(propreD,"PropreD",plot=F, summary=F) # 29
+datapropreg = CSR(propreG,"PropreG",plot=F, summary=F) # 24
+datacontrold = CSR(controlD,"ControlD",plot=F, summary=F) # 69
+datacontrolg = CSR(controlG,"ControlG",plot=F, summary=F) # 74
+
+new1 <- Sys.time() - old1 # calculate difference
+print(new1) # print in nice format
+```
+
+djiodjvid
+
+```{r plot CSR, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=4.29, fig.align="center"}
 datafin=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
 datafin[1,1] = datapouced[1] ; datafin[1,2] = datapouceg[1]
@@ -183,6 +198,12 @@ datafin[3,3] = paste((datafin[3,1]+datafin[3,2])) ; datafin[3,4] = paste("(", ((
 colnames(datafin) = c("Right", "Left", "total","(%)") ; rownames(datafin) = c("Thumb" , "Clean delta" , "Control")
 
 knitr::kable(datafin,format = "markdown",align=c("r","r","r","r"),caption = "Number of CSR patterns for each zone")
+
+```
+
+djiodjvid
+
+```{r plot CSR 2, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=4.29, fig.align="center"}
 
 datafin2=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
@@ -242,54 +263,64 @@ knitr::kable(datafin4,format = "markdown",align=c("r","r","r","r"),caption = "Nu
 \blandscape
 
 
-```{r plot radar function, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=3.98, fig.align="center"}
+```{r angle, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=3.98, fig.align="center"}
+V24=character(nrow(data)) ; V25=character(nrow(data))
+
 for (i in 1:nrow(data)) {
   if (data[i,"delta"] == "delta"){
-    if      (data[i,"angle.a"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ab"]) {data[i,24] = "aab"
-    if(-4 <= data[i,"xc"])                            {data[i,25] = 1} #17 = xc ; 18 = yc
-    else if(-8 <= data[i,"xc"] & data[i,"xc"] < -4)  {data[i,25] = 2}
-    else if(data[i,"xc"] < -8)                       {data[i,25] = 3}}
+    if      (data[i,"angle.a"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ab"]) {V24[i] = "aab"
+    if(-4 <= data[i,"xc"])                            {V25[i] = 1} #17 = xc ; 18 = yc
+    else if(-8 <= data[i,"xc"] & data[i,"xc"] < -4)  {V25[i] = 2}
+    else if(data[i,"xc"] < -8)                       {V25[i] = 3}}
   
-    else if (data[i,"angle.ab"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.b"])  {data[i,24] = "abb"
-    if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 4/sin(deg2rad(data[i,"angle.b"])))                    {data[i,25] = 1}
+    else if (data[i,"angle.ab"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.b"])  {V24[i] = "abb"
+    if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 4/sin(deg2rad(data[i,"angle.b"])))                    {V25[i] = 1}
     else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 4/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
-                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 8/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
-    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 8/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"])    {data[i,25] = 3}}
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 8/sin(deg2rad(data[i,"angle.b"])))    {V25[i] = 2}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) + 8/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"])    {V25[i] = 3}}
     
-    else if (data[i,"angle.b"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.bc"]) {data[i,24] = "bbc"
-    if(data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 4/sin(deg2rad(data[i,"angle.b"])) <= data[i,"yc"])                    {data[i,25] = 1}
+    else if (data[i,"angle.b"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.bc"]) {V24[i] = "bbc"
+    if(data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 4/sin(deg2rad(data[i,"angle.b"])) <= data[i,"yc"])                    {V25[i] = 1}
     else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) -8/sin(deg2rad(data[i,"angle.b"]))) < data[i,"yc"] & 
-                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 4/sin(deg2rad(data[i,"angle.b"])))    {data[i,25] = 2}
-    else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 8/sin(deg2rad(data[i,"angle.b"]))))    {data[i,25] = 3}}
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 4/sin(deg2rad(data[i,"angle.b"])))    {V25[i] = 2}
+    else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.b"]+90)) - 8/sin(deg2rad(data[i,"angle.b"]))))    {V25[i] = 3}}
     
-    else if (data[i,"angle.bc"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.c"])  {data[i,24] = "bcc"
-    if(data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 4/sin(deg2rad(data[i,"angle.c"])) <= data[i,"yc"])                    {data[i,25] = 1}
+    else if (data[i,"angle.bc"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.c"])  {V24[i] = "bcc"
+    if(data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 4/sin(deg2rad(data[i,"angle.c"])) <= data[i,"yc"])                    {V25[i] = 1}
     else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 8/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
-                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 4/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
-    else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 8/sin(deg2rad(data[i,"angle.c"]))))    {data[i,25] = 3}}
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 4/sin(deg2rad(data[i,"angle.c"])))    {V25[i] = 2}
+    else if(          (data[i,"yc"] < data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) + 8/sin(deg2rad(data[i,"angle.c"]))))    {V25[i] = 3}}
     
-    else if (data[i,"angle.c"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ca"]) {data[i,24] = "cca"
-    if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 4/sin(deg2rad(data[i,"angle.c"])))                    {data[i,25] = 1}
+    else if (data[i,"angle.c"]  < data[i,"phi"] & data[i,"phi"] < data[i,"angle.ca"]) {V24[i] = "cca"
+    if(data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 4/sin(deg2rad(data[i,"angle.c"])))                    {V25[i] = 1}
     else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 4/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"] & 
-                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 8/sin(deg2rad(data[i,"angle.c"])))    {data[i,25] = 2}
-    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 8/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"])    {data[i,25] = 3}}
+                      data[i,"yc"] <= data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 8/sin(deg2rad(data[i,"angle.c"])))    {V25[i] = 2}
+    else if(          (data[i,"xc"]*tan(deg2rad(data[i,"angle.c"]+90)) - 8/sin(deg2rad(data[i,"angle.c"]))) < data[i,"yc"])    {V25[i] = 3}}
     
-    else if (data[i,"angle.ca"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.a"]+360)  {data[i,24] = "caa"
-    if(data[i,"xc"] <= 4)                           {data[i,25] = 1}
-    else if(4 < data[i,"xc"] & data[i,"xc"] <= 8)  {data[i,25] = 2}
-    else if(8 < data[i,"xc"])                      {data[i,25] = 3}}
+    else if (data[i,"angle.ca"] < data[i,"phi"] & data[i,"phi"] < data[i,"angle.a"]+360)  {V24[i] = "caa"
+    if(data[i,"xc"] <= 4)                           {V25[i] = 1}
+    else if(4 < data[i,"xc"] & data[i,"xc"] <= 8)  {V25[i] = 2}
+    else if(8 < data[i,"xc"])                      {V25[i] = 3}}
     
-    else if (data[i,"phi"] == data[i,"angle.a"]) {data[i,24] = "a"}
-    else if (data[i,"phi"] == data[i,"angle.b"]) {data[i,24] = "b"}
-    else if (data[i,"phi"] == data[i,"angle.c"]) {data[i,24] = "c"}
+    else if (data[i,"phi"] == data[i,"angle.a"]) {V24[i] = "a";V25[i]="axe"}
+    else if (data[i,"phi"] == data[i,"angle.b"]) {V24[i] = "b";V25[i]="axe"}
+    else if (data[i,"phi"] == data[i,"angle.c"]) {V24[i] = "c";V25[i]="axe"}
     
-    else if (data[i,"phi"] == data[i,"angle.ab"]) {data[i,24] = "ab"}
-    else if (data[i,"phi"] == data[i,"angle.bc"]) {data[i,24] = "bc"}
-    else if (data[i,"phi"] == data[i,"angle.ca"]) {data[i,24] = "ca"}
+    else if (data[i,"phi"] == data[i,"angle.ab"]) {V24[i] = "ab";V25[i]="axe"}
+    else if (data[i,"phi"] == data[i,"angle.bc"]) {V24[i] = "bc";V25[i]="axe"}
+    else if (data[i,"phi"] == data[i,"angle.ca"]) {V24[i] = "ca";V25[i]="axe"}
     
     else {print ("Error")}
-    }}
+  }
+  else {V24[i]="cz";V25[i]="cz"}}
 
+data=cbind(data,V24,V25)
+```
+
+ftzfzt
+
+
+```{r plot radar function, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=3.98, fig.align="center"}
 
 radar3.angle <- function (data, zone, main, angle, title) {
   
@@ -478,3 +509,8 @@ for (a in delta){
 dev.off()
 ```
 
+## Time
+```{r Time}
+new <- Sys.time() - old # calculate difference
+print(new) # print in nice format
+```
