@@ -376,7 +376,7 @@ radar3.angle <- function (data, zone, main, angle, title) {
   colnames(radar.tmp)=c(90,"","",120,"","",150,"","",180,"","",210,"","",240,"","",270,"","",300,"","",330,"","",0,"","",30,"","",60,"","")
   
   radarchart( radar.tmp  , axistype=1 , 
-              pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,1,0,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,1,0,0.3),rgb(0,0,0)) , #custom polygon
+              pcol=c(rgb(1,0,0,0.9),rgb(0,0,1,0.9),rgb(0,0.4,0,0.9),rgb(0,0,0)) , pfcol=c(rgb(1,0,0,0.7), rgb(0,0,1,0.5),rgb(0,0.4,0,0.3),rgb(0,0,0)) , #custom polygon
               cglcol="grey", cglty=1, axislabcol="grey", seg=6, caxislabels=seq(0,30,5), cglwd=0.8,calcex = 0.8, pty = 32, plty=1, plwd=c(1,1,1,2), #custom the grid
               vlcex=0.8 , centerzero=TRUE, #custom labels
               title = "" )
