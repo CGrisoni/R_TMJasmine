@@ -184,7 +184,7 @@ print(new1) # print in nice format
 
 djiodjvid
 
-```{r plot CSR, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=4.29, fig.align="center"}
+```{r plot CSR, echo=FALSE, warning=FALSE, fig.align="center"}
 datafin=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
 datafin[1,1] = datapouced[1] ; datafin[1,2] = datapouceg[1]
@@ -202,7 +202,7 @@ knitr::kable(datafin,format = "markdown",align=c("r","r","r","r"),caption = "Num
 
 djiodjvid
 
-```{r plot CSR 2, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=4.29, fig.align="center"}
+```{r plot CSR 2, echo=FALSE, warning=FALSE, fig.align="center"}
 
 datafin2=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
@@ -220,7 +220,7 @@ knitr::kable(datafin2,format = "markdown",align=c("r","r","r","r"),caption = "Nu
 
 djiodjvid
 
-```{r plot Disp/Clust, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=4.29, fig.align="center"}
+```{r plot Disp/Clust, echo=FALSE, warning=FALSE, fig.align="center"}
 
 datafin3=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
@@ -241,7 +241,7 @@ knitr::kable(datafin3,format = "markdown",align=c("r","r","r","r"),caption = "Nu
 
 dvsduvhiuvs
 
-```{r plot Disp/Clust 2, echo=FALSE, warning=FALSE, fig.height=1.1, fig.width=3.98, fig.align="center"}
+```{r plot Disp/Clust 2, echo=FALSE, warning=FALSE, fig.align="center"}
 datafin4=as.data.frame(matrix(0, ncol = 4, nrow = 3))
 
 datafin4[1,1] = paste(datapouced[2],"/",datapouced[3]) ; datafin4[1,2] = paste(datapouceg[2],"/",datapouceg[3])
@@ -324,10 +324,9 @@ ftzfzt
 radar3.angle <- function (data, zone, main, angle, title) {
   
   # for (i in c("aab","abb","bbc","bcc","cca","caa")){
-  #   if (angle==i){ 
-  #     tmp1 = subset(data, type==zone & d.g==main & V24=="aab" & V25==1) 
-  #     tmp2 = subset(data, type==zone & d.g==main & V24=="aab" & V25==2)
-  #     tmp3 = subset(data, type==zone & d.g==main & V24=="aab" & V25==3)}
+  #     tmp1 = subset(data, type==zone & d.g==main & V24==i & V25==1) 
+  #     tmp2 = subset(data, type==zone & d.g==main & V24==i & V25==2)
+  #     tmp3 = subset(data, type==zone & d.g==main & V24==i & V25==3)
   # } ### à mettre tout à la fin
   
   if (angle=="aab"){
