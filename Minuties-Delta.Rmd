@@ -104,9 +104,8 @@ CSR <- function(data,name, plot = TRUE, summary = TRUE){
   par(oma=c(0,0,1.5,0)+0.1,mar=c(2,1.5,1,0)+0.1)
   
   for (i in unique(data[,1])){
-    datau = data.frame()
-    for (j in 1:nrow(data)){
-      if (data[j,1] == i){datau=rbind(datau,data[j,])}}
+    datau = subset(data,No.==i)
+    
     ppp = ppp(datau[,17],datau[,18],disc(8))
     k=Kest(ppp,correction="Ripley",var.approx = TRUE,ratio= TRUE)
     
