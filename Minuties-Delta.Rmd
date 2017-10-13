@@ -1,5 +1,5 @@
 ---
-title: "Minuties-Delta"
+title: "Analyse-Deltas"
 header-includes:
 - \usepackage{pdflscape}
 - \newcommand{\blandscape}{\begin{landscape}}
